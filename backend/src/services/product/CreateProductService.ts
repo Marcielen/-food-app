@@ -16,7 +16,6 @@ class CreateProductService {
     banner,
     category_id,
   }: ProductRequest) {
-    console.log(name);
     if (name === "") {
       throw new Error("Name invalid");
     }
