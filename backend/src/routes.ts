@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction, Router } from "express";
+import { Router } from "express";
 
 import { CreateUserController } from "./controllers/user/CreateUserController";
 import { EnumWebServices } from "./enum/EnumWebServices";
