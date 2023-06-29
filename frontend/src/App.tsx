@@ -1,8 +1,11 @@
-import { useState } from "react";
+import { BrowserRouter } from "react-router-dom";
+import { RoutesContent } from "routes/index";
 
 function App() {
   return (
-    <h1 className="text-3xl font-bold text-red-700 underline">Hello world!</h1>
+    <BrowserRouter>
+      <RoutesContent />
+    </BrowserRouter>
   );
 }
 
