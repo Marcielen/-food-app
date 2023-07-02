@@ -5,50 +5,65 @@ export default {
     extend: {
       backgroundColor: {
         primary: "#0c0116",
+        purple: "#81007F",
       },
       keyframes: {
-        span1: {
-          "0%": {
-            top: -"48%",
-            left: "8%",
-          },
+        animateTop: {
           "25%": {
-            top: -"48%",
-            left: "58%",
+            width: "100%",
+            opacity: "1",
           },
-          "50%": {
-            top: "100%",
-            left: -"8%",
-          },
-          "75%": {
-            top: "100%",
-            left: -"58%",
+          "30%, 100%": {
+            opacity: "0",
           },
         },
-        span2: {
-          "0%": {
-            top: -"48%",
-            right: "8%",
-          },
-          "25%": {
-            top: -"48%",
-            right: "58%",
-          },
-          "50%": {
-            top: "100%",
-            right: -"8%",
+        animateBottom: {
+          "0%, 50%": {
+            opacity: "0",
+            width: "0",
           },
           "75%": {
-            top: "100%",
-            right: -"58%",
+            opacity: "1",
+            width: "100%",
+          },
+          "76%, 100%": {
+            opacity: "0",
+          },
+        },
+        animateRight: {
+          "0%, 25%": {
+            opacity: "0",
+            height: "0",
+          },
+          "50%": {
+            opacity: "1",
+            height: "100%",
+          },
+          "55%, 100%": {
+            height: "100%",
+            opacity: "0",
+          },
+        },
+        animateLeft: {
+          "0%, 75%": {
+            opacity: "0",
+            bottom: "0",
+            height: "0",
+          },
+          "100%": {
+            opacity: "1",
+            height: "100%",
           },
         },
       },
       animation: {
-        "span-hand": "3s span1 infinite linear",
-        "span2-hand": "3s span2 infinite linear",
+        animateTop: "animateTop 3s ease-in-out infinite",
+        animateBottom: "animateBottom 3s ease-in-out infinite",
+        animateRight: "animateRight 3s ease-in-out infinite",
+        animateLeft: "animateLeft 3s ease-in-out infinite",
       },
     },
   },
-  plugins: [],
+  // eslint-disable-next-line no-undef
+  plugins: [require("tailwindcss-animation-delay")],
 };
