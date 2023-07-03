@@ -6,6 +6,7 @@ export default {
       backgroundColor: {
         primary: "#0c0116",
         purple: "#81007F",
+        red: "#FF3F4B",
       },
       keyframes: {
         animateTop: {
@@ -64,6 +65,4 @@ export default {
       },
     },
   },
-  // eslint-disable-next-line no-undef
-  plugins: [require("tailwindcss-animation-delay")],
 };

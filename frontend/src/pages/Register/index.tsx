@@ -7,13 +7,13 @@ import { InputFlushed } from "components/Input/InputFlushed";
 import { Container } from "components/Layout/Container";
 import { ConstantRoutes } from "constants/constantsRoutes";
 
-export const Login = () => {
+export const Register = () => {
   const formMethods = useForm();
 
   const navigation = useNavigate();
 
-  const handleRegister = () => {
-    navigation(ConstantRoutes.REGISTER);
+  const handleLogin = () => {
+    navigation(ConstantRoutes.LOGIN);
   };
 
   return (
@@ -21,6 +21,7 @@ export const Login = () => {
       <FormProvider {...formMethods}>
         <div className="flex mt-8 justify-center items-center w-full">
           <div>
+            <InputFlushed name="name" label="Nome" className="mb-7 w-[260px]" />
             <InputFlushed
               name="email"
               label="E-mail"
@@ -29,9 +30,9 @@ export const Login = () => {
             <InputFlushed name="senha" className="mb-7" label="Senha" />
             <Button label="Acessar" />
             <ButtonLink
-              onClick={handleRegister}
+              onClick={handleLogin}
               className="mt-3 text-[12px]"
-              label="Registrar nova conta"
+              label="Já possuo uma conta"
             />
           </div>
         </div>
