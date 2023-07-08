@@ -6,14 +6,24 @@ import { ButtonLink } from "components/ButtonLink";
 import { InputFlushed } from "components/Input/InputFlushed";
 import { Container } from "components/Layout/Container";
 import { ConstantRoutes } from "constants/constantsRoutes";
+import { useAuthContext } from "contexts/AuthContext";
 
 export const Login = () => {
+  const { signIn } = useAuthContext();
   const formMethods = useForm();
 
   const navigation = useNavigate();
 
   const handleRegister = () => {
     navigation(ConstantRoutes.REGISTER);
+  };
+
+  const handleSubmit = () => {
+    console.log("lalal");
+    signIn({
+      email: "lalala",
+      password: "hhhh",
+    });
   };
 
   return (
@@ -27,7 +37,7 @@ export const Login = () => {
               className="mb-7 w-[260px]"
             />
             <InputFlushed name="senha" className="mb-7" label="Senha" />
-            <Button label="Acessar" />
+            <Button label="Acessar" onClick={handleSubmit} />
             <ButtonLink
               onClick={handleRegister}
               className="mt-3 text-[12px]"
