@@ -1,14 +1,17 @@
 import { AuthProvider } from "contexts/AuthContext";
 import { BrowserRouter } from "react-router-dom";
 import { RoutesContent } from "routes/index";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   return (
-    <AuthProvider>
-      <BrowserRouter>
+    <BrowserRouter>
+      <AuthProvider>
         <RoutesContent />
-      </BrowserRouter>
-    </AuthProvider>
+        <ToastContainer toastStyle={{ backgroundColor: "white" }} />
+      </AuthProvider>
+    </BrowserRouter>
   );
 }
 

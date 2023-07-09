@@ -1,6 +1,7 @@
 import axios, { AxiosError } from "axios";
 import { signOut } from "contexts/AuthContext";
 import { parseCookies } from "nookies";
+import { toast } from "react-toastify";
 
 export function setupAPIClient(ctx = undefined) {
   const cookies = parseCookies(ctx);
@@ -8,13 +9,17 @@ export function setupAPIClient(ctx = undefined) {
   const api = axios.create({
     baseURL: "http://localhost:4000",
     headers: {
-      Authorization: `Bearer ${cookies["@nextauth.token"]}`,
+      Authorization: `Bearer ${cookies["@auth.token"]}`,
     },
   });
 
   api.interceptors.response.use(
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    //@ts-ignore
     (response) => {
-      return response;
+      if (response?.data) {
+        return response;
+      }
     },
     (error: AxiosError) => {
       if (error.response?.status === 401) {
@@ -26,7 +31,9 @@ export function setupAPIClient(ctx = undefined) {
           return Promise.reject(error);
         }
       }
-
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      toast.error(error?.response?.data?.error || "");
       return Promise.reject(error);
     }
   );

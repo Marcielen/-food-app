@@ -14,10 +14,14 @@ class AuthUserService {
       where: { email: email },
     });
 
+    if (user === null) {
+      throw new Error("Incorrect email or password");
+    }
+
     const { name, email: emailUser, password: passwordUser, id } = user;
 
     if (!user) {
-      throw new Error("User/password incorrect");
+      throw new Error("Incorrect email or password");
     }
 
     const passwordMatch = await compare(password, passwordUser);

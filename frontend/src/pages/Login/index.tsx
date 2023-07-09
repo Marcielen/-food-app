@@ -8,9 +8,17 @@ import { Container } from "components/Layout/Container";
 import { ConstantRoutes } from "constants/constantsRoutes";
 import { useAuthContext } from "contexts/AuthContext";
 
+type FormData = {
+  password: string;
+  email: string;
+};
+
 export const Login = () => {
   const { signIn } = useAuthContext();
-  const formMethods = useForm();
+
+  const formMethods = useForm<FormData>();
+
+  const { handleSubmit: onSubmit } = formMethods;
 
   const navigation = useNavigate();
 
@@ -18,13 +26,9 @@ export const Login = () => {
     navigation(ConstantRoutes.REGISTER);
   };
 
-  const handleSubmit = () => {
-    console.log("lalal");
-    signIn({
-      email: "lalala",
-      password: "hhhh",
-    });
-  };
+  const handleSubmit = onSubmit((data) => {
+    signIn(data);
+  });
 
   return (
     <Container>
@@ -36,7 +40,12 @@ export const Login = () => {
               label="E-mail"
               className="mb-7 w-[260px]"
             />
-            <InputFlushed name="senha" className="mb-7" label="Senha" />
+            <InputFlushed
+              name="password"
+              type="password"
+              className="mb-7"
+              label="Senha"
+            />
             <Button label="Acessar" onClick={handleSubmit} />
             <ButtonLink
               onClick={handleRegister}
