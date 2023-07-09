@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Controller } from "react-hook-form";
+import { Controller, useFormContext } from "react-hook-form";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 
 type InputFlushedProps = {
@@ -17,7 +17,14 @@ export const InputFlushed = ({
 }: InputFlushedProps) => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(true);
 
+  const {
+    setFocus,
+    formState: { errors },
+  } = useFormContext();
+
   const inputIsPassword = type === "password";
+
+  const messageErros = errors[name]?.message;
 
   return (
     <Controller
@@ -42,6 +49,9 @@ export const InputFlushed = ({
               onChange={onChange}
             />
             <label
+              onClick={() => {
+                setFocus(name);
+              }}
               className={`labelLogin absolute bg-none left-2 top-1 text-white cursor-text transition-all ${
                 hasValue ? "text-xs top-[-10px] bg-primary px-[1px] left-1" : ""
               }`}
@@ -54,6 +64,12 @@ export const InputFlushed = ({
                 className="absolute cursor-pointer hover:opacity-[0.8] top-[9px] z-20 right-[14px] flex  justify-end"
               >
                 {isPasswordVisible ? <FiEye /> : <FiEyeOff />}
+              </div>
+            )}
+
+            {messageErros && (
+              <div className="text-xs text-red-600">
+                {messageErros as string}
               </div>
             )}
           </div>

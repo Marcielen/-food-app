@@ -7,6 +7,7 @@ import { InputFlushed } from "components/Input/InputFlushed";
 import { Container } from "components/Layout/Container";
 import { ConstantRoutes } from "constants/constantsRoutes";
 import { useAuthContext } from "contexts/AuthContext";
+import { yupResolver } from "./validationForms";
 
 type FormData = {
   password: string;
@@ -16,7 +17,9 @@ type FormData = {
 export const Login = () => {
   const { signIn } = useAuthContext();
 
-  const formMethods = useForm<FormData>();
+  const formMethods = useForm<FormData>({
+    resolver: yupResolver,
+  });
 
   const { handleSubmit: onSubmit } = formMethods;
 

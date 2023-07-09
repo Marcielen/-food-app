@@ -6,9 +6,23 @@ import { ButtonLink } from "components/ButtonLink";
 import { InputFlushed } from "components/Input/InputFlushed";
 import { Container } from "components/Layout/Container";
 import { ConstantRoutes } from "constants/constantsRoutes";
+import { api } from "service/api";
+import { EnumWebServices } from "constants/webServices";
+import { toast } from "react-toastify";
+import { yupResolver } from "./validationForms";
+
+type FormData = {
+  name: string;
+  password: string;
+  email: string;
+};
 
 export const Register = () => {
-  const formMethods = useForm();
+  const formMethods = useForm<FormData>({
+    resolver: yupResolver,
+  });
+
+  const { handleSubmit } = formMethods;
 
   const navigation = useNavigate();
 
@@ -16,19 +30,31 @@ export const Register = () => {
     navigation(ConstantRoutes.LOGIN);
   };
 
+  const handleCreateUser = handleSubmit(async (data) => {
+    await api.post(EnumWebServices.USERS, data);
+
+    toast.success("Successfully registered user");
+    navigation(ConstantRoutes.LOGIN);
+  });
+
   return (
     <Container>
       <FormProvider {...formMethods}>
         <div className="flex mt-8 justify-center items-center w-full">
           <div>
-            <InputFlushed name="name" label="Nome" className="mb-7 w-[260px]" />
+            <InputFlushed name="name" label="Name" className="mb-7 w-[260px]" />
             <InputFlushed
               name="email"
               label="E-mail"
               className="mb-7 w-[260px]"
             />
-            <InputFlushed name="senha" className="mb-7" label="Senha" />
-            <Button label="Acessar" />
+            <InputFlushed
+              name="password"
+              type="password"
+              className="mb-7"
+              label="Password"
+            />
+            <Button label="Acessar" onClick={handleCreateUser} />
             <ButtonLink
               onClick={handleLogin}
               className="mt-3 text-[12px]"
