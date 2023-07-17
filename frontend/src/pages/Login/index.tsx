@@ -8,6 +8,8 @@ import { Container } from "components/Layout/Container";
 import { ConstantRoutes } from "constants/constantsRoutes";
 import { useAuthContext } from "contexts/AuthContext";
 import { yupResolver } from "./validationForms";
+import { useEffect } from "react";
+import { parseCookies } from "nookies";
 
 type FormData = {
   password: string;
@@ -15,15 +17,19 @@ type FormData = {
 };
 
 export const Login = () => {
-  const { signIn } = useAuthContext();
+  const { signIn, userExpiration } = useAuthContext();
 
   const formMethods = useForm<FormData>({
     resolver: yupResolver,
   });
 
-  const { handleSubmit: onSubmit } = formMethods;
+  const cookies = parseCookies(undefined);
+
+  const isAuthenticated = cookies["@auth.token"];
 
   const navigation = useNavigate();
+
+  const { handleSubmit: onSubmit } = formMethods;
 
   const handleRegister = () => {
     navigation(ConstantRoutes.REGISTER);
@@ -32,6 +38,12 @@ export const Login = () => {
   const handleSubmit = onSubmit((data) => {
     signIn(data);
   });
+
+  useEffect(() => {
+    if (isAuthenticated && !userExpiration) {
+      navigation(ConstantRoutes.HOME);
+    }
+  }, [isAuthenticated, navigation, userExpiration]);
 
   return (
     <Container>

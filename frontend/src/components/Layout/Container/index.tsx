@@ -1,5 +1,5 @@
 import Banner from "assets/banner-.jpg";
-import Logo from "assets/logo.svg";
+import Logo from "assets/teste.svg";
 import { useEffect, useRef, useState } from "react";
 
 type ContainerProps = {
@@ -18,10 +18,10 @@ export const Container = ({ children }: ContainerProps) => {
         >
           <span className="animate-animateTop rounded-lg absolute top-0  left-0 w-0 h-1 bg-sky-600" />
           <span className="animate-animateRight rounded-lg top-0 right-0 absolute w-1 h-0 bg-fuchsia-700"></span>
-          <span className="animate-animateBottom rounded-lg right-0 absolute bottom-0 h-1 bg-red"></span>
+          <span className="animate-animateBottom rounded-lg right-0 absolute bottom-0 h-1 bg-secondary"></span>
           <span className="animate-animateLeft rounded-lg left-0 bottom-0 absolute w-1 h-0 bg-pink-300"></span>
           <div className="flex justify-center pt-2 pb-2 h-[100px] w-full ">
-            <img className="h-[100px] w-[500px]" src={Logo} />
+            <img className="h-[100px] w-[250px]" src={Logo} />
           </div>
           {children}
         </div>

@@ -1,15 +1,30 @@
-import { createContext, ReactNode, useContext, useState } from "react";
+import {
+  createContext,
+  ReactNode,
+  useCallback,
+  useContext,
+  useState,
+} from "react";
 import { useNavigate } from "react-router-dom";
+import jwt_decode from "jwt-decode";
+import { destroyCookie, parseCookies, setCookie } from "nookies";
 
-import { destroyCookie, setCookie } from "nookies";
 import { api } from "service/api";
 import { EnumWebServices } from "constants/webServices";
 
 type AuthContextData = {
   user: UserProps | undefined;
+  valueUser: ValueUserProps;
   isAuthenticated: boolean;
   signIn: (credentials: SignInProps) => Promise<void>;
   signOut: () => void;
+  userExpiration: boolean;
+};
+
+type ValueUserProps = {
+  email: string;
+  name: string;
+  exp: number;
 };
 
 type UserProps = {
@@ -33,6 +48,7 @@ type AuthProviderProps = {
   children: ReactNode;
 };
 
+// eslint-disable-next-line react-refresh/only-export-components
 export function signOut() {
   try {
     destroyCookie(undefined, "@nextauth.token");
@@ -47,6 +63,8 @@ export const AuthContext = createContext({} as AuthContextData);
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [user, setUser] = useState<UserProps>();
   const isAuthenticated = !!user;
+
+  const cookies = parseCookies(undefined);
 
   const navigate = useNavigate();
 
@@ -71,11 +89,33 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
     api.defaults.headers["Authorization"] = `Bearer ${token}`;
 
-    navigate("/teste");
+    window.location.reload();
+    navigate("/register");
   }
 
+  const valueUser = jwt_decode(cookies["@auth.token"] || "") as ValueUserProps;
+
+  const userExpiration = useCallback(() => {
+    if (valueUser.exp) {
+      const dataExp = new Date(valueUser.exp * 1000);
+
+      return new Date() > dataExp;
+    }
+
+    return true;
+  }, [valueUser])();
+
   return (
-    <AuthContext.Provider value={{ user, isAuthenticated, signIn, signOut }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        isAuthenticated,
+        signIn,
+        signOut,
+        valueUser,
+        userExpiration,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

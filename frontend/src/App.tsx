@@ -1,6 +1,6 @@
 import { AuthProvider } from "contexts/AuthContext";
 import { BrowserRouter } from "react-router-dom";
-import { RoutesContent } from "routes/index";
+import { RoutesContent } from "routes/index.routes";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 

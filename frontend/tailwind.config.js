@@ -6,7 +6,7 @@ export default {
       backgroundColor: {
         primary: "#0c0116",
         purple: "#81007F",
-        red: "#FF3F4B",
+        secondary: "#FF7426",
       },
       keyframes: {
         animateTop: {
