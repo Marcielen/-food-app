@@ -1,5 +1,7 @@
 export const ConstantRoutes = {
   LOGIN: "/",
   REGISTER: "/register",
-  HOME: "/home",
+  DASHBOARD: "/dashboard",
+  PRODUCT: "/product",
+  ORDERS: "/orders",
 };

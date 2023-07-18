@@ -1,17 +1,40 @@
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 import { Tooltip } from "components/Tooltip";
+import { ConstantRoutes } from "constants/constantsRoutes";
 
 type ItemMenu = {
   children: React.ReactNode;
   openMenu: boolean;
   description: string;
+  route: string;
 };
 
-export const ItemMenu = ({ children, openMenu, description }: ItemMenu) => {
+export const ItemMenu = ({
+  children,
+  openMenu,
+  description,
+  route,
+}: ItemMenu) => {
+  const [itemSelected, setItemSelected] = useState(ConstantRoutes.DASHBOARD);
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    navigate(route);
+    setItemSelected(route);
+  };
+
   return (
     <>
       <div
+        onClick={handleClick}
         data-tooltip-id={description}
-        className={`flex pl-4 pt-2 pb-2 cursor-pointer hover:text-[#FF7426] hover:bg-primary100`}
+        className={`flex pl-4 pt-2 pb-2 ${
+          itemSelected === route ? "bg-primary100" : ""
+        } ${
+          itemSelected === route ? "text-[#FF7426]" : "text-white"
+        } cursor-pointer hover:text-[#FF7426] hover:bg-primary100`}
       >
         <div>{children}</div>
         <div

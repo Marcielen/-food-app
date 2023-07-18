@@ -9,9 +9,9 @@ export const Contant = ({ children }: ContantProps) => {
   return (
     <div className="flex h-[100vh]">
       <Menu />
-      <div>
+      <div className="w-[100vw]  pr-10">
         <Header />
-        {children}
+        <div className="px-3 pt-5 h-[calc(100%-64px)]">{children}</div>
       </div>
     </div>
   );

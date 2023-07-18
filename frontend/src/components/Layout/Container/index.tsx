@@ -1,6 +1,4 @@
-import Banner from "assets/banner-.jpg";
 import Logo from "assets/teste.svg";
-import { useEffect, useRef, useState } from "react";
 
 type ContainerProps = {
   children: React.ReactNode;
