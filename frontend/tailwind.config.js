@@ -5,6 +5,7 @@ export default {
     extend: {
       backgroundColor: {
         primary: "#0c0116",
+        primary100: "#19052c",
         purple: "#81007F",
         secondary: "#FF7426",
       },

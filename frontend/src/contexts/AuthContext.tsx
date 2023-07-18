@@ -14,7 +14,7 @@ import { EnumWebServices } from "constants/webServices";
 
 type AuthContextData = {
   user: UserProps | undefined;
-  valueUser: ValueUserProps;
+  valueUser: ValueUserProps | undefined;
   isAuthenticated: boolean;
   signIn: (credentials: SignInProps) => Promise<void>;
   signOut: () => void;
@@ -93,10 +93,17 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     navigate("/register");
   }
 
-  const valueUser = jwt_decode(cookies["@auth.token"] || "") as ValueUserProps;
+  const valueUser = useCallback(() => {
+    const valueCookies = cookies["@auth.token"];
+    if (valueCookies) {
+      const dataUser = jwt_decode(valueCookies);
+      return dataUser as ValueUserProps;
+    }
+    return undefined;
+  }, [cookies])();
 
   const userExpiration = useCallback(() => {
-    if (valueUser.exp) {
+    if (valueUser !== undefined && valueUser !== null) {
       const dataExp = new Date(valueUser.exp * 1000);
 
       return new Date() > dataExp;

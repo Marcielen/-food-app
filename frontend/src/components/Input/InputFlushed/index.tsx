@@ -45,7 +45,7 @@ export const InputFlushed = ({
               id="username"
               onBlur={onBlur}
               value={value}
-              className="bg-[#19052c]  px-2 bg-transparent rounded-md w-full border-[#6D5779] border-2 py-1 focus:outline-none  transition-black peer"
+              className="bg-primary100 px-2 bg-transparent rounded-md w-full border-[#6D5779] border-2 py-1 focus:outline-none  transition-black peer"
               onChange={onChange}
             />
             <label
