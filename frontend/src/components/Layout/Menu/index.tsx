@@ -1,4 +1,4 @@
-import { useAuthContext } from "contexts/AuthContext";
+import { signOut, useAuthContext } from "contexts/AuthContext";
 import { useState } from "react";
 import {
   HiMiniArchiveBox,
@@ -11,11 +11,13 @@ import {
 import { ItemMenu } from "./ItemMenu";
 import { Tooltip } from "components/Tooltip";
 import { ConstantRoutes } from "constants/constantsRoutes";
+import { useLayoutContext } from "contexts/LayoutContext";
 
 export const Menu = () => {
   const [openMenu, setOpenMenu] = useState(true);
 
   const { valueUser } = useAuthContext();
+  const { setMenuIsOpen } = useLayoutContext();
 
   const nameUser = valueUser?.name || "";
 
@@ -23,22 +25,27 @@ export const Menu = () => {
 
   return (
     <div
-      className={`h-full pt-3  text-white mr-10 ${
+      className={`h-full pt-3  text-white lg:mr-10 mr-2 ${
         openMenu
-          ? "w-[260px] transition-width duration-500"
+          ? "w-[220px] transition-width duration-500"
           : "w-[70px] transition-width duration-500"
       } bg-primary`}
     >
       <div className="h-[90%]">
         <div className="flex border-b-[1px] items-center ml-2 pl-1 pb-4 mr-2 mb-3">
-          <div className="bg-secondary text-xl pl-2 pr-2 pt-[2px] pb-1 rounded-[5px]">
+          <div className="bg-secondary w-[30px] h-[30px] flex justify-center text-xl pl-2 pr-2  pb-1 rounded-[5px]">
             {initialLetter}
           </div>
-          {openMenu && <p className="ml-2 text-lg">{nameUser}</p>}
+          {openMenu && (
+            <p className="ml-2 whitespace-nowrap text-lg">{nameUser}</p>
+          )}
         </div>
 
         <div
-          onClick={() => setOpenMenu(!openMenu)}
+          onClick={() => {
+            setMenuIsOpen(!openMenu);
+            setOpenMenu(!openMenu);
+          }}
           className="flex pl-4 pt-2 pb-2 cursor-pointer hover:text-[#FF7426] hover:bg-primary100"
         >
           <HiBars3 size={25} />
@@ -69,6 +76,7 @@ export const Menu = () => {
 
       <div
         data-tooltip-id="sing-up"
+        onClick={signOut}
         className="flex cursor-pointer items-center hover:bg-primary100 hover:text-[#FF7426]  pl-1 pt-2 pb-2"
       >
         <div className="text-xl pl-2 pr-2 mt-1  rounded-[5px]">

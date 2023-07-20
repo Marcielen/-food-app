@@ -5,7 +5,6 @@ import {
   useContext,
   useState,
 } from "react";
-import { useNavigate } from "react-router-dom";
 import jwt_decode from "jwt-decode";
 import { destroyCookie, parseCookies, setCookie } from "nookies";
 
@@ -51,8 +50,8 @@ type AuthProviderProps = {
 // eslint-disable-next-line react-refresh/only-export-components
 export function signOut() {
   try {
-    destroyCookie(undefined, "@nextauth.token");
-    window.location.href = "/";
+    destroyCookie(undefined, "@auth.token");
+    window.location.reload();
   } catch {
     console.log("erro ao deslogar");
   }
@@ -65,8 +64,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const isAuthenticated = !!user;
 
   const cookies = parseCookies(undefined);
-
-  const navigate = useNavigate();
 
   async function signIn({ email, password }: SignInProps) {
     const response = await api.post<AuthProps>(EnumWebServices.SESSION, {
@@ -90,7 +87,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     api.defaults.headers["Authorization"] = `Bearer ${token}`;
 
     window.location.reload();
-    navigate("/register");
   }
 
   const valueUser = useCallback(() => {

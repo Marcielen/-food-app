@@ -41,7 +41,7 @@ export const Login = () => {
 
   useEffect(() => {
     if (isAuthenticated && !userExpiration) {
-      navigation(ConstantRoutes.HOME);
+      navigation(ConstantRoutes.DASHBOARD);
     }
   }, [isAuthenticated, navigation, userExpiration]);
 

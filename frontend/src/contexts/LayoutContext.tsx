@@ -10,6 +10,8 @@ import {
 type LayoutContextData = {
   breadcrumbs: string;
   setBreadcrumbs: Dispatch<SetStateAction<string>>;
+  menuIsOpen: boolean;
+  setMenuIsOpen: Dispatch<SetStateAction<boolean>>;
 };
 
 type LayoutProviderProps = {
@@ -20,12 +22,15 @@ export const LayoutContext = createContext({} as LayoutContextData);
 
 export const LayoutProvider = ({ children }: LayoutProviderProps) => {
   const [breadcrumbs, setBreadcrumbs] = useState("");
+  const [menuIsOpen, setMenuIsOpen] = useState(true);
 
   return (
     <LayoutContext.Provider
       value={{
         breadcrumbs,
         setBreadcrumbs,
+        menuIsOpen,
+        setMenuIsOpen,
       }}
     >
       {children}

@@ -16,3 +16,9 @@ input:-webkit-autofill {
   color: white !important;
   transition: background-color 5000s ease-in-out 0s !important;
 }
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}

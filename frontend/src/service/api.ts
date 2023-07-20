@@ -3,6 +3,11 @@ import { signOut } from "contexts/AuthContext";
 import { parseCookies } from "nookies";
 import { toast } from "react-toastify";
 
+export interface ResponseApi<T = unknown> {
+  sucess: boolean;
+  data: T;
+}
+
 export function setupAPIClient(ctx = undefined) {
   const cookies = parseCookies(ctx);
 
@@ -18,7 +23,9 @@ export function setupAPIClient(ctx = undefined) {
     //@ts-ignore
     (response) => {
       if (response?.data) {
-        return response;
+        const sucess = response.status === 200;
+
+        return { data: response.data, sucess };
       }
     },
     (error: AxiosError) => {
