@@ -46,7 +46,7 @@ export const Menu = () => {
             setMenuIsOpen(!openMenu);
             setOpenMenu(!openMenu);
           }}
-          className="flex pl-4 pt-2 pb-2 cursor-pointer hover:text-[#FF7426] hover:bg-primary100"
+          className="flex pl-4 pt-2 pb-2 cursor-pointer hover:text-secondary hover:bg-primary100"
         >
           <HiBars3 size={25} />
         </div>
@@ -68,7 +68,7 @@ export const Menu = () => {
         <ItemMenu
           route={ConstantRoutes.ORDERS}
           openMenu={openMenu}
-          description="Orders"
+          description="Orders registration"
         >
           <HiOutlineClipboardDocumentCheck size={25} />
         </ItemMenu>
@@ -77,9 +77,9 @@ export const Menu = () => {
       <div
         data-tooltip-id="sing-up"
         onClick={signOut}
-        className="flex cursor-pointer items-center hover:bg-primary100 hover:text-[#FF7426]  pl-1 pt-2 pb-2"
+        className="flex cursor-pointer items-center hover:bg-primary100 hover:text-secondary  pl-1 pt-2 pb-2"
       >
-        <div className="text-xl pl-2 pr-2 mt-1  rounded-[5px]">
+        <div className="text-xl pl-3 pr-2 mt-1  rounded-[5px]">
           <HiMiniPower size={25} />
         </div>
         <div

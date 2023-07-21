@@ -50,7 +50,7 @@ export const Input = ({
               placeholder={placeholder}
               className={`px-2 ${
                 leftElement ? "pl-9" : ""
-              } bg-transparent rounded-md w-full border-primary border-2 py-1 focus:outline-none  transition-black peer`}
+              } bg-transparent rounded-md w-full border-2 border-gray-300  py-1 focus:outline-none  transition-black peer`}
               onChange={onChange}
             />
 

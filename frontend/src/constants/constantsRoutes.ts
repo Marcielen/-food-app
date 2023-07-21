@@ -3,5 +3,5 @@ export const ConstantRoutes = {
   REGISTER: "/register",
   DASHBOARD: "/dashboard",
   PRODUCT: "/product",
-  ORDERS: "/orders",
+  ORDERS: "/orders-registrations",
 };

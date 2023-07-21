@@ -6,11 +6,12 @@ export const EnumWebServices = {
   PRODUCT: "/product-list",
   PRODUCT_REMOVE: "/product-remove",
   PRODUCT_CREATE: "/product-create",
+  PRODUCT_UPDATE: "/product-update",
 
-  ITEMS: "/items",
-  ITEMS_CREATE: "/items-create",
-  ITEMS_REMOVE: "/items-remove",
-  ITEMS_UPDATE: "/items-update",
+  ORDERS_REGISTER: "/items",
+  ORDERS_REGISTER_CREATE: "/items-create",
+  ORDERS_REGISTER_REMOVE: "/items-remove",
+  ORDERS_REGISTER_UPDATE: "/items-update",
 
   CATEGORY: "/category",
   CATEGORY_CREATE: "/category-create",

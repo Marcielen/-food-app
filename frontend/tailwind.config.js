@@ -3,11 +3,15 @@ export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
-      backgroundColor: {
+      colors: {
         primary: "#0c0116",
         primary100: "#19052c",
         purple: "#81007F",
         secondary: "#FF7426",
+      },
+
+      fontFamily: {
+        sora: ["Sora", "sans-serif"],
       },
       keyframes: {
         overlayShow: {

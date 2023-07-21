@@ -4,6 +4,7 @@ import { LoginRoutes } from "./login.routes";
 import { RegisterRoutes } from "./register.routes";
 import { DashboardRoute } from "./dashboard.routes";
 import { ProductsRoute } from "./products.routes";
+import { OrdersRoutes } from "./orders.routes";
 
 export const RoutesContent = () => {
   return (
@@ -12,6 +13,7 @@ export const RoutesContent = () => {
       {RegisterRoutes}
       {DashboardRoute}
       {ProductsRoute}
+      {OrdersRoutes}
     </Routes>
   );
 };

@@ -13,8 +13,9 @@ export const ImagePicker = ({ name }: ImagePickerProps) => {
 
   const inputFile = useRef<HTMLInputElement>(null);
 
-  const { setValue } = useFormContext();
-
+  const { setValue, watch } = useFormContext();
+  const valueImage = watch(name);
+  console.log(valueImage);
   function handleChooseImage() {
     if (inputFile.current) {
       inputFile.current.click();
@@ -32,9 +33,13 @@ export const ImagePicker = ({ name }: ImagePickerProps) => {
             onMouseLeave={() => setIsOptionsVisible(false)}
             className="w-full mb-5 relative bg-gray-200 rounded-md border-gray-400 border-dashed border-2  max-h-40 h-full"
           >
-            {image?.name ? (
+            {image?.name || valueImage ? (
               <img
-                src={URL.createObjectURL(image)}
+                src={
+                  valueImage?.name === undefined
+                    ? valueImage
+                    : URL.createObjectURL(image)
+                }
                 alt="image product"
                 className="object-cover w-full h-full"
               />

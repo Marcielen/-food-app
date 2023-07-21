@@ -22,11 +22,12 @@ export function setupAPIClient(ctx = undefined) {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     //@ts-ignore
     (response) => {
-      if (response?.data) {
-        const sucess = response.status === 200;
+      const sucess = response.status === 200;
 
+      if (response?.data) {
         return { data: response.data, sucess };
       }
+      return { sucess };
     },
     (error: AxiosError) => {
       if (error.response?.status === 401) {

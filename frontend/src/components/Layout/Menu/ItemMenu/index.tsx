@@ -28,7 +28,7 @@ export const ItemMenu = ({
       <div
         onClick={handleClick}
         data-tooltip-id={description}
-        className={`flex pl-4 pt-2 pb-2 cursor-pointer hover:text-[#FF7426] hover:bg-primary100`}
+        className={`flex pl-4 pt-2 pb-2 cursor-pointer hover:text-secondary hover:bg-primary100`}
       >
         <div>{children}</div>
         <div
