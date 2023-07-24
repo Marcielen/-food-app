@@ -22,3 +22,29 @@ input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
+
+.scroll-style > div {
+  margin-right: 6px;
+}
+
+.scroll-style::-webkit-scrollbar {
+  width: 4px;
+  height: 5px;
+  scrollbar-width: thin;
+  position: absolute;
+  right: -10px;
+}
+
+.scroll-style::-webkit-scrollbar-track {
+  background: gray.50;
+  border-radius: 6px;
+}
+
+.scroll-style::-webkit-scrollbar-thumb {
+  background: gray.100;
+  border-radius: 6px;
+}
+
+.scroll-style::-webkit-scrollbar-thumb:hover {
+  background: gray.100;
+}

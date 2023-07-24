@@ -6,6 +6,7 @@ import {
   HiOutlineClipboardDocumentCheck,
   HiMiniPower,
   HiChartBarSquare,
+  HiOutlineClipboardDocumentList,
 } from "react-icons/hi2";
 
 import { ItemMenu } from "./ItemMenu";
@@ -71,6 +72,13 @@ export const Menu = () => {
           description="Orders registration"
         >
           <HiOutlineClipboardDocumentCheck size={25} />
+        </ItemMenu>
+        <ItemMenu
+          route={ConstantRoutes.ORDERS_PAD}
+          openMenu={openMenu}
+          description="Orders pad"
+        >
+          <HiOutlineClipboardDocumentList size={25} />
         </ItemMenu>
       </div>
 

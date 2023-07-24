@@ -8,10 +8,19 @@ export const EnumWebServices = {
   PRODUCT_CREATE: "/product-create",
   PRODUCT_UPDATE: "/product-update",
 
-  ORDERS_REGISTER: "/items",
-  ORDERS_REGISTER_CREATE: "/items-create",
-  ORDERS_REGISTER_REMOVE: "/items-remove",
-  ORDERS_REGISTER_UPDATE: "/items-update",
+  ORDERS_REGISTER: "/orders-register",
+  ORDERS_REGISTER_CREATE: "/orders-register-create",
+  ORDERS_REGISTER_REMOVE: "/orders-register-remove",
+  ORDERS_REGISTER_UPDATE: "/orders-register-update",
+
+  ORDERS_PAD: "/orders-pad",
+  ORDERS_PAD_CREATE: "/orders-pad-create",
+  ORDERS_PAD_REMOVE: "/orders-pad-remove",
+
+  ORDERS_PAD_PRODUCT: "/orders-pad-product",
+  ORDERS_PAD_CREATE_PRODUCT: "/orders-pad-product-create",
+  ORDERS_PAD_REMOVE_PRODUCT: "/orders-pad-product-remove",
+  ORDERS_PAD_UPDATE_PRODUCT: "/orders-pad-product-update",
 
   CATEGORY: "/category",
   CATEGORY_CREATE: "/category-create",

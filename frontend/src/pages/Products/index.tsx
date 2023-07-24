@@ -16,7 +16,7 @@ import { Creatable } from "components/Creatable";
 
 import { FormDefaultValues, yupResolver, FormDataProps } from "./validateForms";
 
-type ProductsProps = {
+export type ProductsProps = {
   banner?: string;
   description?: string;
   category_id: string;

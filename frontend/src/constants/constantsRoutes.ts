@@ -4,4 +4,5 @@ export const ConstantRoutes = {
   DASHBOARD: "/dashboard",
   PRODUCT: "/product",
   ORDERS: "/orders-registrations",
+  ORDERS_PAD: "/orders-pad",
 };

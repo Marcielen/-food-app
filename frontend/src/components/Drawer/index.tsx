@@ -25,7 +25,7 @@ export function Drawer({
     <Dialog.Root open={open} onOpenChange={onClose}>
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 z-50 bg-[rgba(0,_0,_0,_0.2)] data-[state=open]:animate-overlayShow" />
-        <Dialog.Content className="fixed right-0 top-[50%] z-50 h-screen w-full max-w-[500px] translate-y-[-50%] bg-white p-[20px] shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none data-[state=open]:animate-contentShow">
+        <Dialog.Content className="fixed right-0 top-[50%] z-50 h-screen w-full max-w-[600px] translate-y-[-50%] bg-white p-[20px] shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none data-[state=open]:animate-contentShow">
           <Dialog.Title className="text-[17px] font-medium">
             <span className="flex w-full text-2xl text-secondary font-bold border-b-2 pb-[10px] justify-start">
               {label}
@@ -44,6 +44,7 @@ export function Drawer({
             </Dialog.Close>
             <div className="w-[120px]">
               <Button
+                typeConfirm
                 label="Confirm"
                 onClick={handleSubmit}
                 className=" rounded-[12px] font-bold h-[32px] ml-4 text-white pb-8 bg-green-500"

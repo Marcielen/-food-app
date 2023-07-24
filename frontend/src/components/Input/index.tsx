@@ -10,6 +10,7 @@ type InputProps = {
   className?: string;
   leftElement?: boolean;
   placeholder?: string;
+  isDisabled?: boolean;
 };
 
 export const Input = ({
@@ -17,6 +18,7 @@ export const Input = ({
   name,
   type,
   className,
+  isDisabled = false,
   leftElement,
   placeholder,
 }: InputProps) => {
@@ -45,12 +47,13 @@ export const Input = ({
             <input
               ref={ref}
               onBlur={onBlur}
+              disabled={isDisabled}
               value={value}
               type={type}
               placeholder={placeholder}
               className={`px-2 ${
                 leftElement ? "pl-9" : ""
-              } bg-transparent rounded-md w-full border-2 border-gray-300  py-1 focus:outline-none  transition-black peer`}
+              } bg-transparent disabled:bg-gray-300 disabled:text-black rounded-md w-full border-2 border-gray-300  py-1 focus:outline-none  transition-black peer`}
               onChange={onChange}
             />
 
