@@ -14,8 +14,9 @@ export const ImagePicker = ({ name }: ImagePickerProps) => {
   const inputFile = useRef<HTMLInputElement>(null);
 
   const { setValue, watch } = useFormContext();
+
   const valueImage = watch(name);
-  console.log(valueImage);
+
   function handleChooseImage() {
     if (inputFile.current) {
       inputFile.current.click();

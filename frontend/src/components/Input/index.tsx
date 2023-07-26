@@ -1,6 +1,5 @@
-import { useState } from "react";
+import { useEffect } from "react";
 import { Controller, useFormContext } from "react-hook-form";
-import { FiEye, FiEyeOff } from "react-icons/fi";
 import { HiMagnifyingGlass } from "react-icons/hi2";
 
 type InputProps = {
@@ -11,6 +10,8 @@ type InputProps = {
   leftElement?: boolean;
   placeholder?: string;
   isDisabled?: boolean;
+  defaultValue?: string | number;
+  onEnterKeyPress?: (value: string) => void;
 };
 
 export const Input = ({
@@ -19,18 +20,28 @@ export const Input = ({
   type,
   className,
   isDisabled = false,
+  onEnterKeyPress,
   leftElement,
   placeholder,
+  defaultValue,
 }: InputProps) => {
   const {
     formState: { errors },
+    setValue,
   } = useFormContext();
 
   const messageErros = errors[name]?.message;
 
+  useEffect(() => {
+    setValue(name, defaultValue);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [defaultValue]);
+
   return (
     <Controller
       name={name}
+      defaultValue={defaultValue}
       render={({ field: { onChange, onBlur, value, ref } }) => {
         return (
           <div className={`${className} relative`}>
@@ -46,6 +57,13 @@ export const Input = ({
             )}
             <input
               ref={ref}
+              onKeyUp={(e: React.KeyboardEvent<HTMLInputElement>) => {
+                if (e.key === "Enter" && onEnterKeyPress) {
+                  e.currentTarget.value = e.currentTarget.value.trim();
+
+                  onEnterKeyPress(e.currentTarget.value);
+                }
+              }}
               onBlur={onBlur}
               disabled={isDisabled}
               value={value}

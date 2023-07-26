@@ -4,8 +4,9 @@ import { useMediaQuery } from "hooks/useMediaQuery";
 
 export const Header = () => {
   const { breadcrumbs } = useLayoutContext();
+
   const isMobile = useMediaQuery("(min-width: 640px)");
-  console.log(breadcrumbs.length);
+
   return (
     <div className=" flex-col-reverse sm:flex-row flex font-bold overflow-x-hidden overflow-y-hidden text-secondary h-[64px] px-[1%] items-start sm:items-center border-b-2 justify-between w-full">
       <div className="flex">

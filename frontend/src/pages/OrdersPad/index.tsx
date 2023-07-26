@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import { FiEdit, FiTrash2 } from "react-icons/fi";
-import { toast } from "react-toastify";
+import { FiTrash2 } from "react-icons/fi";
 
 import { EnumWebServices } from "constants/webServices";
 import { ResponseApi, api } from "service/api";
@@ -9,43 +8,20 @@ import { ResponseApi, api } from "service/api";
 import { Button } from "components/Button";
 import { Drawer } from "components/Drawer";
 import { Input } from "components/Input";
-import { Switch } from "components/Swiper";
-
-import { formDefaultValues, FormData, yupResolver } from "./validationForms";
-import { IoFastFoodOutline } from "react-icons/io5";
-import { HiMiniPlusCircle } from "react-icons/hi2";
-import { OrdersPadItem } from "./OrdersPadItem";
 import { SelectDefault } from "components/Select";
 import { ProductsProps } from "pages/Products";
 
-type OrdersProps = {
-  active: boolean;
-  id: string;
-  order: string;
-};
-
-type UpdateDataProps = {
-  id: string;
-  order_pad_id: string;
-};
-
-type OrdersPadProps = {
-  order_id: string;
-  id: string;
-};
-
-type ListProductsProps = {
-  product_id: string | null;
-  amount: number;
-  order_pad_id?: string;
-};
-
-const formDefaultProduct = [
-  {
-    product_id: "0",
-    amount: 0,
-  },
-];
+import {
+  formDefaultValues,
+  FormData,
+  yupResolver,
+  OrdersProps,
+  OrdersPadProps,
+  ListProductsProps,
+  formDefaultProduct,
+  UpdateDataProps,
+} from "./validationForms";
+import { OrdersPadItem } from "./OrdersPadItem";
 
 export const OrdersPad = () => {
   const [listOrders, setListOrders] = useState<OrdersProps[]>([]);
@@ -58,14 +34,40 @@ export const OrdersPad = () => {
   const [openDrawer, setOpenDrawer] = useState(false);
 
   const formMethods = useForm<FormData>({
-    //defaultValues: formDefaultValues,
-    //resolver: yupResolver,
+    defaultValues: formDefaultValues,
+    resolver: yupResolver,
   });
 
   const { handleSubmit: onSubmit, reset, watch, setValue } = formMethods;
 
+  const handleOpenDrawe = () => {
+    setListProducts(formDefaultProduct);
+    setIsUpdateData(false);
+    setOpenDrawer(true);
+  };
+
+  const handleRemoveProduct = async (index: number) => {
+    const newListProduct = [...listProducts];
+
+    newListProduct.splice(index, 1);
+
+    const product = newListProduct.map((itemProduct) => {
+      const amount = watch(`amount-${itemProduct.product_id}`);
+      const product_id = watch(`product_id-${itemProduct.product_id}`);
+
+      return {
+        product_id: itemProduct.product_id,
+        amount: Number(amount),
+        id: product_id,
+      } as ListProductsProps;
+    });
+
+    setListProducts(product);
+  };
+
   const handleCreateNewProduct = useCallback(() => {
     const id = Math.floor(Date.now() * Math.random()).toString(36);
+
     const newProduct = {
       product_id: id,
       amount: 0,
@@ -109,8 +111,8 @@ export const OrdersPad = () => {
   const updateOrdersPad = useCallback(() => {
     getDataOrdersPad();
     setOpenDrawer(false);
-    //reset(formDefaultValues);
-  }, [getDataOrdersPad]);
+    reset(formDefaultValues);
+  }, [getDataOrdersPad, reset]);
 
   const updateProduct = useCallback(
     async (order_pad_id: string) => {
@@ -177,15 +179,9 @@ export const OrdersPad = () => {
       getDataOrder();
       setOpenDrawer(false);
       setListProducts(formDefaultProduct);
-      //reset(formDefaultValues);
+      reset(formDefaultValues);
     }
   });
-
-  const handleOpenDrawe = () => {
-    setListProducts(formDefaultProduct);
-    setIsUpdateData(false);
-    setOpenDrawer(true);
-  };
 
   useEffect(() => {
     getDataOrder();
@@ -244,12 +240,13 @@ export const OrdersPad = () => {
               />
             </div>
             <div className="scroll-style mt-3 pl-[2px] w-full overflow-y-auto h-full max-h-[400px]">
-              {listProducts.map((productItem) => (
+              {listProducts.map((productItem, index) => (
                 <div className="flex items-center justify-center mb-5 w-full">
                   <div className="w-full mr-5">
                     <SelectDefault
                       name={`product_id-${productItem.product_id}`}
                       label="Product"
+                      defaultValue={productItem.id}
                       options={selectProducts.map((productItem) => ({
                         label: productItem.name,
                         value: productItem.id,
@@ -261,11 +258,15 @@ export const OrdersPad = () => {
                       name={`amount-${productItem.product_id}`}
                       label="Amount"
                       type="number"
+                      defaultValue={productItem.amount}
                     />
                   </div>
-                  <div className=" h-[40px] flex items-center ml-2 mt-4 justify-center">
+                  <div className="h-[40px] flex items-center ml-2 mt-4 justify-center">
                     <FiTrash2
                       size={20}
+                      onClick={() => {
+                        handleRemoveProduct(index);
+                      }}
                       className=" mr-1 cursor-pointer text-gray-600 hover:text-red-500"
                     />
                   </div>

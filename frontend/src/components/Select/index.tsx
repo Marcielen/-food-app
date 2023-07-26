@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import Select from "react-select";
 
@@ -10,6 +11,7 @@ interface SelectProps {
   valueIsObject?: boolean;
   isMulti?: boolean;
   isDisabled?: boolean;
+  defaultValue?: string;
   options: {
     label: string;
     value: string;
@@ -19,6 +21,7 @@ interface SelectProps {
 export const SelectDefault = ({
   label,
   isMulti = false,
+  defaultValue,
   name,
   isDisabled = false,
   options,
@@ -42,9 +45,16 @@ export const SelectDefault = ({
     return null;
   };
 
+  useEffect(() => {
+    setValue(name, defaultValue);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [defaultValue]);
+
   return (
     <Controller
       name={name}
+      defaultValue={defaultValue}
       render={({ field: { onBlur, value, ref } }) => {
         return (
           <div className={`${className} relative`}>
@@ -72,6 +82,10 @@ export const SelectDefault = ({
                   boxShadow: "none",
                   height: "32px",
                 }),
+                menuPortal: (base) => ({
+                  ...base,
+                  zIndex: 9999,
+                }),
 
                 indicatorSeparator: () => ({ display: "none" }),
                 option: (provided, state) => ({
@@ -87,6 +101,7 @@ export const SelectDefault = ({
                   },
                 }),
               }}
+              menuPortalTarget={document.body}
               isDisabled={isDisabled}
               isMulti={isMulti}
               onBlur={onBlur}

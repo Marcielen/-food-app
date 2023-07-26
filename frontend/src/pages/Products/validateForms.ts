@@ -1,7 +1,8 @@
+import { Resolver } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver as yupResolverInstance } from "@hookform/resolvers/yup";
+
 import { MessageRequired } from "constants/messageRequired";
-import { Resolver } from "react-hook-form";
 
 export const FormDefaultValues = {
   name: "",

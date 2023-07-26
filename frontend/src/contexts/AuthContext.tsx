@@ -129,7 +129,7 @@ export function useAuthContext(): AuthContextData {
   const context = useContext(AuthContext);
 
   if (!context)
-    throw new Error("useAuthContext must be used within a MusicProvider.");
+    throw new Error("useAuthContext must be used within a AuthProvider.");
 
   return context;
 }

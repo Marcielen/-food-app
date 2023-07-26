@@ -1,5 +1,7 @@
 import { FormProvider, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import { parseCookies } from "nookies";
 
 import { Button } from "components/Button";
 import { ButtonLink } from "components/ButtonLink";
@@ -7,9 +9,8 @@ import { InputFlushed } from "components/Input/InputFlushed";
 import { Container } from "components/Layout/Container";
 import { ConstantRoutes } from "constants/constantsRoutes";
 import { useAuthContext } from "contexts/AuthContext";
+
 import { yupResolver } from "./validationForms";
-import { useEffect } from "react";
-import { parseCookies } from "nookies";
 
 type FormData = {
   password: string;

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { ForwardedRef, useCallback, useRef, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { FiEdit, FiTrash2 } from "react-icons/fi";
 import { toast } from "react-toastify";
@@ -12,6 +12,15 @@ import { Input } from "components/Input";
 import { Switch } from "components/Swiper";
 
 import { formDefaultValues, FormData, yupResolver } from "./validationForms";
+import {
+  Pagination,
+  PaginationData,
+  RefPaginationProps,
+} from "components/Pagination";
+
+export interface OrdersResponse extends PaginationData {
+  search?: string;
+}
 
 type OrdersProps = {
   active: boolean;
@@ -23,6 +32,9 @@ export const Orders = () => {
   const [listOrders, setListOrders] = useState<OrdersProps[]>([]);
   const [isUpdateData, setIsUpdateData] = useState(false);
   const [openDrawer, setOpenDrawer] = useState(false);
+  const [totalCount, setTotalCount] = useState(0);
+
+  const refPagination = useRef<RefPaginationProps>({} as RefPaginationProps);
 
   const formMethods = useForm<FormData>({
     defaultValues: formDefaultValues,
@@ -31,27 +43,34 @@ export const Orders = () => {
 
   const { handleSubmit: onSubmit, reset } = formMethods;
 
-  const getDataOrder = useCallback(async () => {
-    const response = await api.get<OrdersProps[]>(
-      EnumWebServices.ORDERS_REGISTER
-    );
+  const getDataOrder = useCallback(async (data?: OrdersResponse) => {
+    const response = await api.get<{
+      registry: OrdersProps[];
+      totalCount: number;
+    }>(EnumWebServices.ORDERS_REGISTER, {
+      params: { ...data },
+    });
 
-    setListOrders(response.data);
+    setListOrders(response.data.registry);
+    setTotalCount(response.data.totalCount);
   }, []);
 
-  const handleRemoveOrder = useCallback(
-    async (id: string) => {
-      const response = await api.delete<void, ResponseApi>(
-        `${EnumWebServices.ORDERS_REGISTER_REMOVE}?item_id=${id}`
-      );
+  const searchOrders = (value: string) => {
+    getDataOrder({
+      search: value.length > 0 ? value : undefined,
+    });
+  };
 
-      if (response.sucess) {
-        getDataOrder();
-        toast.success("Product delected");
-      }
-    },
-    [getDataOrder]
-  );
+  const handleRemoveOrder = useCallback(async (id: string) => {
+    const response = await api.delete<void, ResponseApi>(
+      `${EnumWebServices.ORDERS_REGISTER_REMOVE}?item_id=${id}`
+    );
+
+    if (response.sucess) {
+      refPagination.current?.reload();
+      toast.success("Product delected");
+    }
+  }, []);
 
   const handleUpdateOrder = useCallback(
     (orders: OrdersProps) => {
@@ -89,9 +108,12 @@ export const Orders = () => {
     setOpenDrawer(true);
   };
 
-  useEffect(() => {
-    getDataOrder();
-  }, [getDataOrder]);
+  const loadColumnsData = useCallback(
+    (itensPaginate: PaginationData) => {
+      getDataOrder(itensPaginate);
+    },
+    [getDataOrder]
+  );
 
   return (
     <FormProvider {...formMethods}>
@@ -100,6 +122,8 @@ export const Orders = () => {
           <Input
             name="search"
             leftElement
+            onEnterKeyPress={(value) => searchOrders(value)}
+            placeholder="Press enter to perform the search"
             className="w-full mb-2 lg:mb-0 lg:w-[300px]"
           />
         </div>
@@ -130,6 +154,11 @@ export const Orders = () => {
         className="mt-7 grid gap-6 grid-cols-1 sm:grid-cols-3 md:grid-cols-3 
       lg:grid-cols-6"
       >
+        <Pagination
+          ref={refPagination}
+          loadColumnsData={loadColumnsData}
+          nPages={totalCount}
+        />
         {listOrders.map((itemOrder) => (
           <div
             key={itemOrder.id}

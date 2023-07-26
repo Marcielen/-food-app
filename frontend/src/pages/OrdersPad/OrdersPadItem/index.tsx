@@ -1,26 +1,23 @@
 import { useCallback, useState } from "react";
-import { FiEdit, FiTrash2 } from "react-icons/fi";
+import { FiTrash2 } from "react-icons/fi";
 import { MdContentPasteSearch } from "react-icons/md";
 import { IoFastFoodOutline } from "react-icons/io5";
 import { toast } from "react-toastify";
+import { HiMiniPlusCircle } from "react-icons/hi2";
 
 import { ResponseApi, api } from "service/api";
 import { EnumWebServices } from "constants/webServices";
 
 import { ModalDetailProducts } from "components/Modal/ModalDetailProducts";
 import { ProductsProps } from "pages/Products";
-import { HiMiniPlusCircle } from "react-icons/hi2";
+
+import { UpdateDataProps } from "../validationForms";
 
 type OrdersProps = {
   active?: boolean;
   id: string;
   order?: string;
   order_id: string;
-};
-
-type UpdateDataProps = {
-  id: string;
-  order_pad_id: string;
 };
 
 type OrdersPadItem = {

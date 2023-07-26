@@ -1,4 +1,3 @@
-import { signOut, useAuthContext } from "contexts/AuthContext";
 import { useState } from "react";
 import {
   HiMiniArchiveBox,
@@ -9,10 +8,13 @@ import {
   HiOutlineClipboardDocumentList,
 } from "react-icons/hi2";
 
-import { ItemMenu } from "./ItemMenu";
-import { Tooltip } from "components/Tooltip";
+import { signOut, useAuthContext } from "contexts/AuthContext";
 import { ConstantRoutes } from "constants/constantsRoutes";
 import { useLayoutContext } from "contexts/LayoutContext";
+
+import { Tooltip } from "components/Tooltip";
+
+import { ItemMenu } from "./ItemMenu";
 
 export const Menu = () => {
   const [openMenu, setOpenMenu] = useState(true);

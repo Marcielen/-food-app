@@ -1,11 +1,12 @@
-import { EnumWebServices } from "constants/webServices";
 import { useEffect, useCallback } from "react";
+
+import { EnumWebServices } from "constants/webServices";
 import { api } from "service/api";
 
 export const Dashboard = () => {
   const getDataBuy = useCallback(async () => {
     const response = await api.get(EnumWebServices.BUY);
-    console.log(response);
+    //console.log(response);
   }, []);
 
   useEffect(() => {
