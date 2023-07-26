@@ -41,7 +41,7 @@ export const Orders = () => {
     resolver: yupResolver,
   });
 
-  const { handleSubmit: onSubmit, reset } = formMethods;
+  const { handleSubmit: onSubmit, reset, getValues } = formMethods;
 
   const getDataOrder = useCallback(async (data?: OrdersResponse) => {
     const response = await api.get<{
@@ -55,10 +55,8 @@ export const Orders = () => {
     setTotalCount(response.data.totalCount);
   }, []);
 
-  const searchOrders = (value: string) => {
-    getDataOrder({
-      search: value.length > 0 ? value : undefined,
-    });
+  const searchOrders = () => {
+    refPagination.current?.reload();
   };
 
   const handleRemoveOrder = useCallback(async (id: string) => {
@@ -97,7 +95,7 @@ export const Orders = () => {
     }
 
     if (response.sucess) {
-      getDataOrder();
+      refPagination.current?.reload();
       setOpenDrawer(false);
       reset(formDefaultValues);
     }
@@ -110,7 +108,7 @@ export const Orders = () => {
 
   const loadColumnsData = useCallback(
     (itensPaginate: PaginationData) => {
-      getDataOrder(itensPaginate);
+      getDataOrder({ ...itensPaginate, search: getValues().search });
     },
     [getDataOrder]
   );
@@ -122,7 +120,7 @@ export const Orders = () => {
           <Input
             name="search"
             leftElement
-            onEnterKeyPress={(value) => searchOrders(value)}
+            onEnterKeyPress={() => searchOrders()}
             placeholder="Press enter to perform the search"
             className="w-full mb-2 lg:mb-0 lg:w-[300px]"
           />
@@ -150,46 +148,48 @@ export const Orders = () => {
           </div>
         </>
       </div>
-      <div
-        className="mt-7 grid gap-6 grid-cols-1 sm:grid-cols-3 md:grid-cols-3 
-      lg:grid-cols-6"
-      >
-        <Pagination
-          ref={refPagination}
-          loadColumnsData={loadColumnsData}
-          nPages={totalCount}
-        />
-        {listOrders.map((itemOrder) => (
+      <Pagination
+        ref={refPagination}
+        loadColumnsData={loadColumnsData}
+        nPages={totalCount}
+        renderTableRows={
           <div
-            key={itemOrder.id}
-            className="bg-gray-50 shadow-[0px_0px_6px_#00000034] hover:shadow-[#6D5779] 
-            min-w-full lg:min-w-[70px] h-[110px] rounded-lg p-4 flex items-center justify-between"
+            className="mt-7 grid gap-6 grid-cols-1 sm:grid-cols-3 md:grid-cols-3 
+      lg:grid-cols-6"
           >
-            <div className="flex w-full justify-center">
-              <div className="font-sora  text-gray-600">
-                <div className="text-md">Table</div>
-                <div>
-                  <p className="font-bold text-secondary text-center text-2xl">
-                    {itemOrder.order}
-                  </p>
-                </div>
-                <div className="flex mt-1 w-full justify-center">
-                  <FiTrash2
-                    size={15}
-                    onClick={() => handleRemoveOrder(itemOrder.id)}
-                    className=" mr-1 cursor-pointer hover:text-red-500"
-                  />
-                  <FiEdit
-                    size={14}
-                    onClick={() => handleUpdateOrder(itemOrder)}
-                    className=" cursor-pointer hover:text-green-500"
-                  />
+            {listOrders.map((itemOrder) => (
+              <div
+                key={itemOrder.id}
+                className="bg-gray-50 shadow-[0px_0px_6px_#00000034] hover:shadow-[#6D5779] 
+            min-w-full lg:min-w-[70px] h-[110px] rounded-lg flex items-center justify-between"
+              >
+                <div className="flex w-full justify-center">
+                  <div className="font-sora  text-gray-600">
+                    <div className="text-md">Table</div>
+                    <div>
+                      <p className="font-bold text-secondary text-center text-2xl">
+                        {itemOrder.order}
+                      </p>
+                    </div>
+                    <div className="flex mt-1 w-full justify-center">
+                      <FiTrash2
+                        size={15}
+                        onClick={() => handleRemoveOrder(itemOrder.id)}
+                        className=" mr-1 cursor-pointer hover:text-red-500"
+                      />
+                      <FiEdit
+                        size={14}
+                        onClick={() => handleUpdateOrder(itemOrder)}
+                        className=" cursor-pointer hover:text-green-500"
+                      />
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
+            ))}
           </div>
-        ))}
-      </div>
+        }
+      />
     </FormProvider>
   );
 };

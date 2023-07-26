@@ -1,9 +1,6 @@
 interface PaginationItemProps
   extends React.InputHTMLAttributes<HTMLButtonElement> {
   isCurrent?: boolean;
-  bg?: string;
-  opacity?: string;
-  bgColor?: string;
 }
 
 export function PaginationItem({
@@ -11,22 +8,12 @@ export function PaginationItem({
   onClick,
   children,
   disabled,
-  bg = "white",
-  opacity = "1",
-  color = "black",
-  id,
-  bgColor = "secondary.500",
 }: PaginationItemProps) {
   if (isCurrent) {
     return (
       <button
-        className="w-7 h-7 text-sm"
+        className="w-7 h-7 text-sm rounded-md disabled:cursor-default disabled:text-gray-400"
         disabled
-        style={{
-          color,
-          cursor: disabled ? "default" : "pointer",
-          background: disabled ? bgColor : "",
-        }}
       >
         {children}
       </button>
@@ -35,12 +22,7 @@ export function PaginationItem({
 
   return (
     <button
-      className="w-7 h-7 text-sm"
-      style={{
-        background: bg,
-        color,
-        opacity,
-      }}
+      className="w-7 h-7 rounded-md hover:text-white text-sm hover:bg-primary"
       onClick={onClick}
       disabled={disabled}
     >

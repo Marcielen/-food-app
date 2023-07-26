@@ -6,9 +6,6 @@ import {
   useImperativeHandle,
   useState,
 } from "react";
-import { FormProvider, useForm } from "react-hook-form";
-
-//import { LoadingDefault } from "components/Loading";
 
 import { PaginationItem } from "./PaginationItem";
 
@@ -22,15 +19,18 @@ export type RefPaginationProps = {
   reload: () => void;
 };
 
+const paginationDefault = {
+  currentPage: 1,
+  pageSize: 10,
+  paginate: true,
+} as PaginationData;
+
 interface PaginationProps {
   nPages: number;
   loadColumnsData: (paginationData: PaginationData) => void;
   asSiblingsCountFixed?: boolean;
   isLoading?: boolean;
   renderTableRows?: ReactNode;
-  canResetOrderColumnWhenLoad?: boolean;
-  w?: string | string[];
-  isBorderWidth?: boolean;
 }
 
 function generatePagesArray(from: number, to: number) {
@@ -42,24 +42,10 @@ function generatePagesArray(from: number, to: number) {
 const siblingsCount = 1;
 
 export const Pagination = forwardRef<RefPaginationProps, PaginationProps>(
-  (
-    {
-      nPages,
-      isBorderWidth = true,
-      loadColumnsData,
-      asSiblingsCountFixed,
-      renderTableRows,
-    },
-    ref
-  ) => {
+  ({ nPages, loadColumnsData, asSiblingsCountFixed, renderTableRows }, ref) => {
     const [currentPage, setCurrentPage] = useState(1);
-    const [paginationData, setPaginationData] = useState<PaginationData>({
-      currentPage,
-      pageSize: 10,
-      paginate: true,
-    });
-
-    const formMethods = useForm<FormData>();
+    const [paginationData, setPaginationData] =
+      useState<PaginationData>(paginationDefault);
 
     const lastPage = Math.ceil(nPages / 10);
 
@@ -96,9 +82,8 @@ export const Pagination = forwardRef<RefPaginationProps, PaginationProps>(
     };
 
     const reload = useCallback(() => {
-      console.log("oi");
-      loadColumnsData(paginationData);
-    }, [loadColumnsData, paginationData]);
+      loadColumnsData(paginationDefault);
+    }, [loadColumnsData]);
 
     useImperativeHandle(ref, () => ({
       reload,
@@ -109,99 +94,83 @@ export const Pagination = forwardRef<RefPaginationProps, PaginationProps>(
     }, [loadColumnsData, paginationData]);
 
     return (
-      <div
-        className={`bg-red-400 w-full ${
-          isBorderWidth ? "border-[0.7px]" : "border-0"
-        } rounded-[8px] ${isBorderWidth ? "border-gray-100" : ""}`}
-      >
-        <FormProvider {...formMethods}>
-          {/*  {(isLoading || loadingPagination) && <LoadingDefault />} */}
-          <div className="overflow-auto rounded-t-4px w-full">
-            {renderTableRows}
-          </div>
+      <div>
+        {/*  {(isLoading || loadingPagination) && <LoadingDefault />} */}
+        <div className="mb-8">{renderTableRows}</div>
 
-          <div
-            className={`flex pt-[15px] pb-[15px] ${
-              isBorderWidth ? "border-t-[1px]" : "border-t-0"
-            } border-gray-100 justify-between items-center flex-row md:flex-col`}
-          >
+        <div
+          className={`flex pt-[15px] pb-[15px]  justify-between items-center flex-row md:flex-col`}
+        >
+          <div className="flex justify-center items-center">
+            <p
+              className="text-md hover:text-white transition-duration hover:bg-primary text-black cursor-pointer 
+              border-[2px] rounded-tl-[8px] rounded-bs-[8px] border-gray-200 p-[5px] h-[32px]"
+              onClick={() => {
+                if (currentPage !== 1) {
+                  setCurrentPage(1);
+                  handleRefreshPage(1);
+                }
+              }}
+            >
+              Início
+            </p>
             <div className="flex justify-center items-center">
-              <p
-                className="text-md transition-duration hover:bg-slate-500 text-black cursor-pointer 
-              border-[2px] rounded-tl-[8px] rounded-bs-[8px] border-white p-[5px] h-[32px]"
-                onClick={() => {
-                  if (currentPage !== 1) {
-                    setCurrentPage(1);
-                    handleRefreshPage(1);
-                  }
-                }}
+              <PaginationItem
+                disabled={currentPage === 1}
+                onClick={() => handleRefreshPage(currentPage - 1)}
               >
-                Início
-              </p>
-              <div className="flex justify-center items-center">
-                <PaginationItem
-                  disabled={currentPage === 1}
-                  color="secondary.800"
-                  onClick={() => handleRefreshPage(currentPage - 1)}
-                >
-                  &laquo;
-                </PaginationItem>
+                &laquo;
+              </PaginationItem>
 
-                {previousPages.length > 0 &&
-                  previousPages.map((page) => (
-                    <PaginationItem
-                      key={page}
-                      color="secondary.500"
-                      id="previousPage"
-                      onClick={() => handleRefreshPage(page)}
-                    >
-                      {page}
-                    </PaginationItem>
-                  ))}
+              {previousPages.length > 0 &&
+                previousPages.map((page) => (
+                  <PaginationItem
+                    key={page}
+                    id="previousPage"
+                    onClick={() => handleRefreshPage(page)}
+                  >
+                    {page}
+                  </PaginationItem>
+                ))}
 
-                <PaginationItem bgColor="secondary.500" color="white" isCurrent>
-                  {currentPage}
-                </PaginationItem>
+              <PaginationItem isCurrent>{currentPage}</PaginationItem>
 
-                {nextPages.length > 0 &&
-                  nextPages.map((page) => (
-                    <PaginationItem
-                      key={page}
-                      color="secondary.500"
-                      id="nextPage"
-                      onClick={() => handleRefreshPage(page)}
-                    >
-                      {page}
-                    </PaginationItem>
-                  ))}
+              {nextPages.length > 0 &&
+                nextPages.map((page) => (
+                  <PaginationItem
+                    key={page}
+                    id="nextPage"
+                    onClick={() => handleRefreshPage(page)}
+                  >
+                    {page}
+                  </PaginationItem>
+                ))}
 
-                <PaginationItem
-                  disabled={
-                    currentPage === lastPage ||
-                    nPages < (paginationData?.pageSize || 10)
-                  }
-                  color="secondary.800"
-                  onClick={() => handleRefreshPage(currentPage + 1)}
-                >
-                  &raquo;
-                </PaginationItem>
-              </div>
-
-              <p
-                className="text-md transition-duration hover:bg-slate-500 text-black cursor-pointer 
-              border-[2px] rounded-tr-[8px] rounded-be-[8px] border-white p-[5px] h-[32px]"
-                onClick={() => {
-                  if (currentPage !== lastPage && nPages !== 0) {
-                    setCurrentPage(lastPage);
-                    handleRefreshPage(lastPage);
-                  }
-                }}
+              <PaginationItem
+                disabled={
+                  currentPage === lastPage ||
+                  nPages < (paginationData?.pageSize || 10)
+                }
+                onClick={() => handleRefreshPage(currentPage + 1)}
               >
-                Última
-              </p>
+                &raquo;
+              </PaginationItem>
             </div>
+
+            <p
+              className="text-md transition-duration hover:text-white hover:bg-primary text-black cursor-pointer 
+              border-[2px] rounded-tr-[8px] rounded-be-[8px] border-gray-200 p-[5px] h-[32px]"
+              onClick={() => {
+                if (currentPage !== lastPage && nPages !== 0) {
+                  setCurrentPage(lastPage);
+                  handleRefreshPage(lastPage);
+                }
+              }}
+            >
+              Última
+            </p>
           </div>
-        </FormProvider>
+        </div>
       </div>
     );
   }
