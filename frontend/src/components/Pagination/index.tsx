@@ -96,81 +96,90 @@ export const Pagination = forwardRef<RefPaginationProps, PaginationProps>(
     return (
       <div>
         {/*  {(isLoading || loadingPagination) && <LoadingDefault />} */}
-        <div className="mb-8">{renderTableRows}</div>
-
-        <div
-          className={`flex pt-[15px] pb-[15px]  justify-between items-center flex-row md:flex-col`}
-        >
-          <div className="flex justify-center items-center">
-            <p
-              className="text-md hover:text-white transition-duration hover:bg-primary text-black cursor-pointer 
-              border-[2px] rounded-tl-[8px] rounded-bs-[8px] border-gray-200 p-[5px] h-[32px]"
-              onClick={() => {
-                if (currentPage !== 1) {
-                  setCurrentPage(1);
-                  handleRefreshPage(1);
-                }
-              }}
-            >
-              Início
-            </p>
-            <div className="flex justify-center items-center">
-              <PaginationItem
-                disabled={currentPage === 1}
-                onClick={() => handleRefreshPage(currentPage - 1)}
-              >
-                &laquo;
-              </PaginationItem>
-
-              {previousPages.length > 0 &&
-                previousPages.map((page) => (
-                  <PaginationItem
-                    key={page}
-                    id="previousPage"
-                    onClick={() => handleRefreshPage(page)}
-                  >
-                    {page}
-                  </PaginationItem>
-                ))}
-
-              <PaginationItem isCurrent>{currentPage}</PaginationItem>
-
-              {nextPages.length > 0 &&
-                nextPages.map((page) => (
-                  <PaginationItem
-                    key={page}
-                    id="nextPage"
-                    onClick={() => handleRefreshPage(page)}
-                  >
-                    {page}
-                  </PaginationItem>
-                ))}
-
-              <PaginationItem
-                disabled={
-                  currentPage === lastPage ||
-                  nPages < (paginationData?.pageSize || 10)
-                }
-                onClick={() => handleRefreshPage(currentPage + 1)}
-              >
-                &raquo;
-              </PaginationItem>
+        <div className="mb-2 h-[400px] md:h-[400px] pl-1 pr-1 overflow-y-auto">
+          {nPages === 0 ? (
+            <div className="mt-5 underline text-lg text-gray-500">
+              No data found
             </div>
-
-            <p
-              className="text-md transition-duration hover:text-white hover:bg-primary text-black cursor-pointer 
-              border-[2px] rounded-tr-[8px] rounded-be-[8px] border-gray-200 p-[5px] h-[32px]"
-              onClick={() => {
-                if (currentPage !== lastPage && nPages !== 0) {
-                  setCurrentPage(lastPage);
-                  handleRefreshPage(lastPage);
-                }
-              }}
-            >
-              Última
-            </p>
-          </div>
+          ) : (
+            renderTableRows
+          )}
         </div>
+        {nPages > 10 && (
+          <div
+            className={`flex border-t-2 pt-[15px] pb-[15px] justify-center md:justify-between items-center flex-row md:flex-col`}
+          >
+            <div className="flex justify-center items-center">
+              <p
+                className="text-md hover:text-white transition-duration hover:bg-primary text-black cursor-pointer 
+              border-[2px] rounded-tl-[8px] rounded-bs-[8px] border-gray-200 p-[5px] h-[32px]"
+                onClick={() => {
+                  if (currentPage !== 1) {
+                    setCurrentPage(1);
+                    handleRefreshPage(1);
+                  }
+                }}
+              >
+                First
+              </p>
+              <div className="flex justify-center items-center">
+                <PaginationItem
+                  disabled={currentPage === 1}
+                  onClick={() => handleRefreshPage(currentPage - 1)}
+                >
+                  &laquo;
+                </PaginationItem>
+
+                {previousPages.length > 0 &&
+                  previousPages.map((page) => (
+                    <PaginationItem
+                      key={page}
+                      id="previousPage"
+                      onClick={() => handleRefreshPage(page)}
+                    >
+                      {page}
+                    </PaginationItem>
+                  ))}
+
+                <PaginationItem isCurrent>{currentPage}</PaginationItem>
+
+                {nextPages.length > 0 &&
+                  nextPages.map((page) => (
+                    <PaginationItem
+                      key={page}
+                      id="nextPage"
+                      onClick={() => handleRefreshPage(page)}
+                    >
+                      {page}
+                    </PaginationItem>
+                  ))}
+
+                <PaginationItem
+                  disabled={
+                    currentPage === lastPage ||
+                    nPages < (paginationData?.pageSize || 10)
+                  }
+                  onClick={() => handleRefreshPage(currentPage + 1)}
+                >
+                  &raquo;
+                </PaginationItem>
+              </div>
+
+              <p
+                className="text-md transition-duration hover:text-white hover:bg-primary text-black cursor-pointer 
+              border-[2px] rounded-tr-[8px] rounded-be-[8px] border-gray-200 p-[5px] h-[32px]"
+                onClick={() => {
+                  if (currentPage !== lastPage && nPages !== 0) {
+                    setCurrentPage(lastPage);
+                    handleRefreshPage(lastPage);
+                  }
+                }}
+              >
+                Last
+              </p>
+            </div>
+          </div>
+        )}
       </div>
     );
   }

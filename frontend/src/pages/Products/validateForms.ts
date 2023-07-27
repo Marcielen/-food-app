@@ -22,6 +22,7 @@ export type FormDataProps = {
   description: string;
   file?: string | File;
   id?: string;
+  search?: string;
 };
 
 const schema = yup.object().shape({

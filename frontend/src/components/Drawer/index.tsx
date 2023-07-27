@@ -13,6 +13,7 @@ type DrawerProps = {
   handleSubmit: () => void;
   open: boolean;
   onClose: () => void;
+  disabled?: boolean;
 };
 
 export function Drawer({
@@ -20,6 +21,7 @@ export function Drawer({
   open,
   onClose,
   children,
+  disabled = false,
   handleSubmit,
 }: DrawerProps) {
   return (
@@ -46,6 +48,7 @@ export function Drawer({
             <div className="w-[120px]">
               <Button
                 typeConfirm
+                disabled={disabled}
                 label="Confirm"
                 onClick={handleSubmit}
                 className=" rounded-[12px] font-bold h-[32px] ml-4 text-white pb-8 bg-green-500"

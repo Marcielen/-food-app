@@ -82,14 +82,11 @@ export const SelectDefault = ({
                   boxShadow: "none",
                   height: "32px",
                 }),
-                menuPortal: (base) => ({
-                  ...base,
-                  zIndex: 9999,
-                }),
 
                 indicatorSeparator: () => ({ display: "none" }),
                 option: (provided, state) => ({
                   ...provided,
+                  zIndex: 9999,
                   backgroundColor: state.isSelected ? "#ccc" : "inherit",
                   color: "black",
                   ":hover": {
@@ -101,18 +98,23 @@ export const SelectDefault = ({
                   },
                 }),
               }}
-              menuPortalTarget={document.body}
               isDisabled={isDisabled}
               isMulti={isMulti}
               onBlur={onBlur}
               options={options as any}
-              value={options.find((item) => item.value === value)}
+              value={
+                valueIsObject
+                  ? value
+                  : options.find((item) => item.value === value)
+              }
               placeholder={placeholder}
               onChange={(e) => {
                 if (!valueIsObject) {
                   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                   // @ts-ignore
                   setValue(name, formatValue(e.value));
+                } else {
+                  setValue(name, e);
                 }
               }}
             />

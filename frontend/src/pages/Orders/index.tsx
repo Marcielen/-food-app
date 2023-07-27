@@ -110,7 +110,7 @@ export const Orders = () => {
     (itensPaginate: PaginationData) => {
       getDataOrder({ ...itensPaginate, search: getValues().search });
     },
-    [getDataOrder]
+    [getDataOrder, getValues]
   );
 
   return (
@@ -155,7 +155,7 @@ export const Orders = () => {
         renderTableRows={
           <div
             className="mt-7 grid gap-6 grid-cols-1 sm:grid-cols-3 md:grid-cols-3 
-      lg:grid-cols-6"
+      lg:grid-cols-6 "
           >
             {listOrders.map((itemOrder) => (
               <div

@@ -1,6 +1,6 @@
 import { IoFastFoodOutline } from "react-icons/io5";
 import { FormProvider, useForm } from "react-hook-form";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { FiEdit, FiTrash2 } from "react-icons/fi";
 import { toast } from "react-toastify";
 
@@ -13,6 +13,11 @@ import { Drawer } from "components/Drawer";
 import { Input } from "components/Input";
 import { ImagePicker } from "components/ImagePicker";
 import { Creatable } from "components/Creatable";
+import {
+  Pagination,
+  PaginationData,
+  RefPaginationProps,
+} from "components/Pagination";
 
 import { FormDefaultValues, yupResolver, FormDataProps } from "./validateForms";
 
@@ -24,6 +29,10 @@ export type ProductsProps = {
   name: string;
   price: string;
 };
+
+interface ProductsResponse extends PaginationData {
+  search?: string;
+}
 
 type ListCategoryProps = {
   label: string;
@@ -38,20 +47,30 @@ type CategoryResponse = {
 export const Products = () => {
   const [listProducts, setListProducts] = useState<ProductsProps[]>([]);
   const [listCategory, setCategory] = useState<ListCategoryProps[]>([]);
+  const [totalCount, setTotalCount] = useState(0);
   const [isUpdateData, setIsUpdateData] = useState(false);
   const [openDrawer, setOpenDrawer] = useState(false);
+
+  const refPagination = useRef<RefPaginationProps>({} as RefPaginationProps);
 
   const formMethods = useForm<FormDataProps>({
     resolver: yupResolver,
   });
 
-  const { handleSubmit: onSubmit, reset } = formMethods;
+  const { handleSubmit: onSubmit, reset, getValues } = formMethods;
 
-  const getDataProducts = useCallback(async () => {
-    const response = await api.get<ProductsProps[]>(EnumWebServices.PRODUCT);
+  const getDataProducts = useCallback(async (data?: ProductsResponse) => {
+    const response = await api.get<{
+      registry: ProductsProps[];
+      totalCount: number;
+    }>(EnumWebServices.PRODUCT, {
+      params: {
+        ...data,
+      },
+    });
 
     setListProducts(
-      response.data.map((item) => ({
+      response.data.registry.map((item) => ({
         ...item,
         banner:
           item.banner && !item.banner?.includes(import.meta.env.VITE_APP_API)
@@ -59,21 +78,19 @@ export const Products = () => {
             : item.banner,
       }))
     );
+    setTotalCount(response.data.totalCount);
   }, []);
 
-  const handleRemoveProduct = useCallback(
-    async (id: string) => {
-      const response = await api.delete<void, ResponseApi>(
-        `${EnumWebServices.PRODUCT_REMOVE}?product_id=${id}`
-      );
+  const handleRemoveProduct = useCallback(async (id: string) => {
+    const response = await api.delete<void, ResponseApi>(
+      `${EnumWebServices.PRODUCT_REMOVE}?product_id=${id}`
+    );
 
-      if (response.sucess) {
-        getDataProducts();
-        toast.success("Product delected");
-      }
-    },
-    [getDataProducts]
-  );
+    if (response.sucess) {
+      refPagination.current.reload();
+      toast.success("Product delected");
+    }
+  }, []);
 
   const getCategory = useCallback(async () => {
     const response = await api.get<void, ResponseApi<CategoryResponse[]>>(
@@ -114,6 +131,13 @@ export const Products = () => {
     [reset]
   );
 
+  const loadColumnsData = useCallback(
+    (itensPaginate: PaginationData) => {
+      getDataProducts({ ...itensPaginate, search: getValues().search });
+    },
+    [getDataProducts, getValues]
+  );
+
   const createProduct = onSubmit(async (data) => {
     const valueData = new FormData();
 
@@ -142,7 +166,7 @@ export const Products = () => {
     }
 
     if (response.sucess) {
-      getDataProducts();
+      refPagination.current.reload();
       setOpenDrawer(false);
       setIsUpdateData(false);
       reset(FormDefaultValues);
@@ -155,13 +179,13 @@ export const Products = () => {
     setOpenDrawer(true);
   };
 
+  const searchOrders = () => {
+    refPagination.current?.reload();
+  };
+
   useEffect(() => {
     getCategory();
   }, [getCategory]);
-
-  useEffect(() => {
-    getDataProducts();
-  }, [getDataProducts]);
 
   return (
     <FormProvider {...formMethods}>
@@ -170,6 +194,7 @@ export const Products = () => {
           <Input
             name="search"
             leftElement
+            onEnterKeyPress={searchOrders}
             className="w-full mb-2 lg:mb-0 lg:w-[300px]"
           />
         </div>
@@ -213,52 +238,59 @@ export const Products = () => {
           </div>
         </>
       </div>
-      <div className="mt-7 grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2">
-        {listProducts.map((itemProduct) => (
-          <div
-            key={itemProduct.id}
-            className="bg-gray-50 shadow-[0px_0px_6px_#00000034] hover:shadow-[#6D5779] min-w-full lg:min-w-[400px] h-[100px] rounded-lg p-4 flex items-center justify-between"
-          >
-            <div className="flex">
-              <div className="mr-2">
-                {itemProduct?.banner ? (
-                  <img
-                    src={itemProduct?.banner}
-                    className="w-[80px] h-full object-cover rounded-md"
-                  />
-                ) : (
-                  <div className="w-[80px] h-full flex justify-center object-cover rounded-md">
-                    <IoFastFoodOutline size={60} />
+      <Pagination
+        ref={refPagination}
+        loadColumnsData={loadColumnsData}
+        nPages={totalCount}
+        renderTableRows={
+          <div className="mt-7 grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2">
+            {listProducts.map((itemProduct) => (
+              <div
+                key={itemProduct.id}
+                className="bg-gray-50 shadow-[0px_0px_6px_#00000034] hover:shadow-[#6D5779] min-w-full lg:min-w-[400px] h-[100px] rounded-lg p-4 flex items-center justify-between"
+              >
+                <div className="flex">
+                  <div className="mr-2">
+                    {itemProduct?.banner ? (
+                      <img
+                        src={itemProduct?.banner}
+                        className="w-[80px] h-full object-cover rounded-md"
+                      />
+                    ) : (
+                      <div className="w-[80px] h-full flex justify-center object-cover rounded-md">
+                        <IoFastFoodOutline size={60} />
+                      </div>
+                    )}
                   </div>
-                )}
+                  <div>
+                    <p className="text-gray-700 font-bold text-[16px]">
+                      {itemProduct.name}
+                    </p>
+                    <p className="text-green-500 font-bold text-[16px]">
+                      {DecimalMask(itemProduct.price)}
+                    </p>
+                    <p className="text-gray-500  text-[12px]">
+                      {itemProduct?.description}
+                    </p>
+                  </div>
+                </div>
+                <div>
+                  <FiTrash2
+                    size={18}
+                    onClick={() => handleRemoveProduct(itemProduct.id)}
+                    className="mb-1 cursor-pointer hover:text-red-500"
+                  />
+                  <FiEdit
+                    size={16}
+                    onClick={() => handleUpdateProduct(itemProduct)}
+                    className="mb-1 cursor-pointer hover:text-green-500"
+                  />
+                </div>
               </div>
-              <div>
-                <p className="text-gray-700 font-bold text-[16px]">
-                  {itemProduct.name}
-                </p>
-                <p className="text-green-500 font-bold text-[16px]">
-                  {DecimalMask(itemProduct.price)}
-                </p>
-                <p className="text-gray-500  text-[12px]">
-                  {itemProduct?.description}
-                </p>
-              </div>
-            </div>
-            <div>
-              <FiTrash2
-                size={18}
-                onClick={() => handleRemoveProduct(itemProduct.id)}
-                className="mb-1 cursor-pointer hover:text-red-500"
-              />
-              <FiEdit
-                size={16}
-                onClick={() => handleUpdateProduct(itemProduct)}
-                className="mb-1 cursor-pointer hover:text-green-500"
-              />
-            </div>
+            ))}
           </div>
-        ))}
-      </div>
+        }
+      />
     </FormProvider>
   );
 };

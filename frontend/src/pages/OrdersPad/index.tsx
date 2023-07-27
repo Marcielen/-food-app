@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useState } from "react";
-import { FormProvider, useForm } from "react-hook-form";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { FieldName, FormProvider, useForm } from "react-hook-form";
 import { FiTrash2 } from "react-icons/fi";
 
 import { EnumWebServices } from "constants/webServices";
@@ -14,7 +14,6 @@ import { ProductsProps } from "pages/Products";
 import {
   formDefaultValues,
   FormData,
-  yupResolver,
   OrdersProps,
   OrdersPadProps,
   ListProductsProps,
@@ -22,6 +21,15 @@ import {
   UpdateDataProps,
 } from "./validationForms";
 import { OrdersPadItem } from "./OrdersPadItem";
+import {
+  Pagination,
+  PaginationData,
+  RefPaginationProps,
+} from "components/Pagination";
+
+interface OrdersPadResponse extends PaginationData {
+  search?: string;
+}
 
 export const OrdersPad = () => {
   const [listOrders, setListOrders] = useState<OrdersProps[]>([]);
@@ -30,20 +38,31 @@ export const OrdersPad = () => {
   const [listProducts, setListProducts] =
     useState<ListProductsProps[]>(formDefaultProduct);
   const [orderPadId, setOrderPadId] = useState("");
+  const [totalCount, setTotalCount] = useState(0);
   const [isUpdateData, setIsUpdateData] = useState(false);
   const [openDrawer, setOpenDrawer] = useState(false);
 
+  const refPagination = useRef<RefPaginationProps>({} as RefPaginationProps);
+
   const formMethods = useForm<FormData>({
     defaultValues: formDefaultValues,
-    resolver: yupResolver,
   });
 
-  const { handleSubmit: onSubmit, reset, watch, setValue } = formMethods;
+  const {
+    handleSubmit: onSubmit,
+    reset,
+    watch,
+    setValue,
+    getValues,
+  } = formMethods;
+
+  const orderIdWatch = watch("order_id");
 
   const handleOpenDrawe = () => {
     setListProducts(formDefaultProduct);
     setIsUpdateData(false);
     setOpenDrawer(true);
+    reset(formDefaultProduct);
   };
 
   const handleRemoveProduct = async (index: number) => {
@@ -63,6 +82,10 @@ export const OrdersPad = () => {
     });
 
     setListProducts(product);
+  };
+
+  const handleGetOrdersPad = () => {
+    refPagination.current.reload();
   };
 
   const handleCreateNewProduct = useCallback(() => {
@@ -90,29 +113,33 @@ export const OrdersPad = () => {
     setSelectProducts(response.data);
   }, []);
 
-  const getDataOrdersPad = useCallback(async () => {
-    const response = await api.get<OrdersPadProps[]>(
-      EnumWebServices.ORDERS_PAD
-    );
+  const getDataOrdersPad = useCallback(async (data?: OrdersPadResponse) => {
+    const response = await api.get<{
+      registry: OrdersPadProps[];
+      totalCount: number;
+    }>(EnumWebServices.ORDERS_PAD, {
+      params: { ...data },
+    });
 
-    setListOrdersPad(response.data);
+    setListOrdersPad(response.data.registry);
+    setTotalCount(response.data.totalCount);
   }, []);
 
   const handleCreateProduct = useCallback(
     (data: UpdateDataProps) => {
       setIsUpdateData(true);
       setOpenDrawer(true);
-      setValue("order_id", data.id);
+      setValue("order_id", { label: data.label, value: data.id });
       setOrderPadId(data.order_pad_id);
     },
     [setValue]
   );
 
   const updateOrdersPad = useCallback(() => {
-    getDataOrdersPad();
+    refPagination.current.reload();
     setOpenDrawer(false);
     reset(formDefaultValues);
-  }, [getDataOrdersPad, reset]);
+  }, [reset]);
 
   const updateProduct = useCallback(
     async (order_pad_id: string) => {
@@ -151,9 +178,14 @@ export const OrdersPad = () => {
 
   const handleCreateOrderPad = useCallback(
     async (data: FormData) => {
+      const valueData = data.order_id as {
+        value: string;
+        label: string;
+      };
+
       const responseDataOrderPad = await api.post<void, ResponseApi<string>>(
         EnumWebServices.ORDERS_PAD_CREATE,
-        { order_id: data.order_id }
+        { order_id: valueData.value, label: valueData.label }
       );
 
       if (responseDataOrderPad.sucess) {
@@ -162,6 +194,13 @@ export const OrdersPad = () => {
       return false;
     },
     [updateProduct]
+  );
+
+  const loadColumnsData = useCallback(
+    (itensPaginate: PaginationData) => {
+      getDataOrdersPad({ ...itensPaginate, search: getValues()?.search || "" });
+    },
+    [getDataOrdersPad, getValues]
   );
 
   const handleConfirm = onSubmit(async (data) => {
@@ -188,10 +227,6 @@ export const OrdersPad = () => {
   }, [getDataOrder]);
 
   useEffect(() => {
-    getDataOrdersPad();
-  }, [getDataOrdersPad]);
-
-  useEffect(() => {
     getDataProducts();
   }, [getDataProducts]);
 
@@ -209,6 +244,7 @@ export const OrdersPad = () => {
           <Drawer
             open={openDrawer}
             onClose={() => setOpenDrawer(false)}
+            disabled={orderIdWatch === undefined && !isUpdateData}
             handleSubmit={() => {
               handleConfirm();
             }}
@@ -218,6 +254,7 @@ export const OrdersPad = () => {
               <SelectDefault
                 name="order_id"
                 label="Orders"
+                valueIsObject={true}
                 isDisabled={isUpdateData}
                 options={listOrders.map((ordersItem) => ({
                   label: ordersItem.order,
@@ -241,7 +278,7 @@ export const OrdersPad = () => {
             </div>
             <div className="scroll-style mt-3 pl-[2px] w-full overflow-y-auto h-full max-h-[400px]">
               {listProducts.map((productItem, index) => (
-                <div className="flex items-center justify-center mb-5 w-full">
+                <div className="flex items-center ml-2 justify-center mb-5 w-full">
                   <div className="w-full mr-5">
                     <SelectDefault
                       name={`product_id-${productItem.product_id}`}
@@ -283,27 +320,35 @@ export const OrdersPad = () => {
           </div>
         </>
       </div>
-      <div
-        className="mt-7 grid gap-6 grid-cols-1 sm:grid-cols-3 md:grid-cols-3 
+      <Pagination
+        ref={refPagination}
+        loadColumnsData={loadColumnsData}
+        nPages={totalCount}
+        renderTableRows={
+          <div
+            className="mt-7 grid gap-6 grid-cols-1 sm:grid-cols-3 md:grid-cols-3 
       lg:grid-cols-6"
-      >
-        {listOrdersPad.map((itemOrder) => {
-          const newListOrders = {
-            ...listOrders.find((order) => order.id === itemOrder.order_id),
-            id: itemOrder.id,
-            order_id: itemOrder.order_id,
-          };
+          >
+            {listOrdersPad.map((itemOrder) => {
+              const newListOrders = {
+                ...listOrders.find((order) => order.id === itemOrder.order_id),
+                id: itemOrder.id,
+                order_id: itemOrder.order_id,
+                label: itemOrder.label,
+              };
 
-          return (
-            <OrdersPadItem
-              handleCreateProduct={handleCreateProduct}
-              selectProducts={selectProducts}
-              getDataOrdersPad={getDataOrdersPad}
-              itemOrder={newListOrders || ({} as OrdersProps)}
-            />
-          );
-        })}
-      </div>
+              return (
+                <OrdersPadItem
+                  handleCreateProduct={handleCreateProduct}
+                  selectProducts={selectProducts}
+                  getDataOrdersPad={handleGetOrdersPad}
+                  itemOrder={newListOrders || ({} as OrdersProps)}
+                />
+              );
+            })}
+          </div>
+        }
+      />
     </FormProvider>
   );
 };

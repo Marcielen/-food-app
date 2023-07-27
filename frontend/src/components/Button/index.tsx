@@ -15,7 +15,7 @@ export const Button = ({
     <button
       className={`${
         typeConfirm ? "bg-green-500" : "bg-secondary"
-      } w-full py-2 rounded-md hover:opacity-[0.8] ${className}`}
+      } w-full py-2 disabled:bg-slate-400 disabled:text-black rounded-md hover:opacity-[0.8] ${className}`}
       {...rest}
     >
       {label}

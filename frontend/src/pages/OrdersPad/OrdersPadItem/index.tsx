@@ -18,11 +18,12 @@ type OrdersProps = {
   id: string;
   order?: string;
   order_id: string;
+  label: string;
 };
 
 type OrdersPadItem = {
   itemOrder: OrdersProps;
-  getDataOrdersPad: () => Promise<void>;
+  getDataOrdersPad: () => void;
   selectProducts: ProductsProps[];
   handleCreateProduct: (data: UpdateDataProps) => void;
 };
@@ -43,7 +44,7 @@ export const OrdersPadItem = ({
       );
 
       if (response.sucess) {
-        await getDataOrdersPad();
+        getDataOrdersPad();
         toast.success("Product delected");
       }
     },
@@ -84,6 +85,7 @@ export const OrdersPadItem = ({
                     handleCreateProduct({
                       id: itemOrder.order_id,
                       order_pad_id: itemOrder.id,
+                      label: itemOrder.label,
                     })
                   }
                   className=" mr-1 cursor-pointer hover:text-green-500"

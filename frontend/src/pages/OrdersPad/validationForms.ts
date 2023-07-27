@@ -1,15 +1,12 @@
-import { Resolver } from "react-hook-form";
-import * as yup from "yup";
-import { yupResolver as yupResolverInstance } from "@hookform/resolvers/yup";
-
-import { MessageRequired } from "constants/messageRequired";
-
-export interface FormData extends Record<string, string> {
-  order_id: string;
+export type FieldName = `amount-${string}`;
+export interface FormData {
+  order_id: { label: string; value: string } | null;
+  search?: string;
+  [key: string]: any;
 }
 
 export const formDefaultValues = {
-  order_id: "",
+  order_id: null,
 };
 
 export type OrdersProps = {
@@ -21,11 +18,13 @@ export type OrdersProps = {
 export type UpdateDataProps = {
   id: string;
   order_pad_id: string;
+  label: string;
 };
 
 export type OrdersPadProps = {
   order_id: string;
   id: string;
+  label: string;
 };
 
 export type ListProductsProps = {
@@ -41,9 +40,3 @@ export const formDefaultProduct = [
     amount: 0,
   },
 ];
-
-const schema = yup.object().shape({
-  order_id: yup.string().required(MessageRequired.REQUIRED_FIELD),
-});
-
-export const yupResolver = yupResolverInstance(schema) as Resolver<FormData>;
