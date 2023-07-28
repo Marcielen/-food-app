@@ -1,21 +1,35 @@
+import { EnumWebServices } from "constants/webServices";
 import {
   createContext,
   Dispatch,
   ReactNode,
   SetStateAction,
+  useCallback,
   useContext,
+  useEffect,
   useState,
 } from "react";
+import { api } from "service/api";
 
 type LayoutContextData = {
   breadcrumbs: string;
   setBreadcrumbs: Dispatch<SetStateAction<string>>;
   menuIsOpen: boolean;
   setMenuIsOpen: Dispatch<SetStateAction<boolean>>;
+  itemsPay: ListItemsPay[];
+  setItemsPay: (value: SetStateAction<ListItemsPay[]>) => void;
 };
 
 type LayoutProviderProps = {
   children: ReactNode;
+};
+
+type ListItemsPay = {
+  id: string;
+  price: number;
+  order_pad_id: string;
+  name: string;
+  isChecked?: boolean;
 };
 
 export const LayoutContext = createContext({} as LayoutContextData);
@@ -23,6 +37,22 @@ export const LayoutContext = createContext({} as LayoutContextData);
 export const LayoutProvider = ({ children }: LayoutProviderProps) => {
   const [breadcrumbs, setBreadcrumbs] = useState("");
   const [menuIsOpen, setMenuIsOpen] = useState(true);
+  const [itemsPay, setItemsPay] = useState<ListItemsPay[]>([]);
+
+  const getDataBuy = useCallback(async () => {
+    const response = await api.get<ListItemsPay[]>(EnumWebServices.BUY);
+
+    setItemsPay(
+      response.data.map((item) => ({
+        ...item,
+        isChecked: false,
+      }))
+    );
+  }, []);
+
+  useEffect(() => {
+    getDataBuy();
+  }, [getDataBuy]);
 
   return (
     <LayoutContext.Provider
@@ -31,6 +61,8 @@ export const LayoutProvider = ({ children }: LayoutProviderProps) => {
         setBreadcrumbs,
         menuIsOpen,
         setMenuIsOpen,
+        itemsPay,
+        setItemsPay,
       }}
     >
       {children}

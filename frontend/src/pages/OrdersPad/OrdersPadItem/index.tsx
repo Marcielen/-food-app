@@ -64,7 +64,7 @@ export const OrdersPadItem = ({
       className="bg-gray-50 relative shadow-[0px_0px_6px_#00000034] hover:shadow-[#6D5779] 
             min-w-full lg:min-w-[70px] h-[110px] rounded-lg p-4 flex items-center justify-between"
     >
-      {isOptionsVisible && (
+      {isOptionsVisible && itemOrder.active && (
         <>
           <div className="absolute top-0 left-0  bg-slate-100 w-full h-full rounded-md" />
           <div className="text-black absolute top-0 left-0 w-full h-full items-center flex justify-center">
@@ -104,7 +104,11 @@ export const OrdersPadItem = ({
           </div>
         </>
       )}
-      <div className="flex w-full justify-center">
+      <div
+        className={`flex w-full justify-center ${
+          itemOrder.active ? "opacity-0-0" : "opacity-[0.6]"
+        }`}
+      >
         <div className="font-sora  text-yellow-500">
           <div className="w-[80px] mt-2 flex justify-center object-cover rounded-md">
             <IoFastFoodOutline size={55} />
@@ -120,6 +124,7 @@ export const OrdersPadItem = ({
         selectProducts={selectProducts}
         order_pad_id={itemOrder.id}
         open={isOpenModal}
+        labelOrderPad={itemOrder.label}
         onClose={() => setIsOpenModal(false)}
       />
     </div>

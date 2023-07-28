@@ -6,6 +6,7 @@ import { DashboardRoute } from "./dashboard.routes";
 import { ProductsRoute } from "./products.routes";
 import { OrdersRoutes } from "./orders.routes";
 import { OrdersPadRoutes } from "./orders-pad.routes";
+import { PayRoutes } from "./pay.routes";
 
 export const RoutesContent = () => {
   return (
@@ -17,6 +18,7 @@ export const RoutesContent = () => {
       {OrdersRoutes}
       {OrdersRoutes}
       {OrdersPadRoutes}
+      {PayRoutes}
     </Routes>
   );
 };

@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 
 import { EnumWebServices } from "constants/webServices";
 import { ResponseApi, api } from "service/api";
-import { DecimalMask } from "helpers/monelMask";
+import { DecimalMask } from "helpers/decimalMask";
 
 import { Button } from "components/Button";
 import { Drawer } from "components/Drawer";

@@ -36,7 +36,7 @@ export const Input = ({
     setValue(name, defaultValue);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [defaultValue]);
+  }, [defaultValue, setValue]);
 
   return (
     <Controller
@@ -51,7 +51,7 @@ export const Input = ({
               </label>
             )}
             {leftElement && (
-              <div className="absolute cursor-pointer hover:opacity-[0.8] top-[10px] z-20 left-[14px] flex justify-start">
+              <div className="absolute cursor-pointer hover:opacity-[0.8] top-[10px] z-10 left-[14px] flex justify-start">
                 <HiMagnifyingGlass />
               </div>
             )}

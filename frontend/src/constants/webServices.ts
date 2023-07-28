@@ -16,6 +16,7 @@ export const EnumWebServices = {
   ORDERS_PAD: "/orders-pad",
   ORDERS_PAD_CREATE: "/orders-pad-create",
   ORDERS_PAD_REMOVE: "/orders-pad-remove",
+  ORDERS_PAD_UPDATE: "/orders-pad-update",
 
   ORDERS_PAD_PRODUCT: "/orders-pad-product",
   ORDERS_PAD_CREATE_PRODUCT: "/orders-pad-product-create",

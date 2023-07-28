@@ -49,12 +49,9 @@ type AuthProviderProps = {
 
 // eslint-disable-next-line react-refresh/only-export-components
 export function signOut() {
-  try {
-    destroyCookie(undefined, "@auth.token");
-    window.location.reload();
-  } catch {
-    console.log("erro ao deslogar");
-  }
+  destroyCookie(undefined, "@auth.token");
+  window.location.reload();
+  window.stop();
 }
 
 export const AuthContext = createContext({} as AuthContextData);

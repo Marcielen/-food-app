@@ -9,11 +9,13 @@ import { useEffect } from "react";
 export type ProtectedRouteProps = {
   component: JSX.Element;
   breadcrumb: string;
+  isVisibleLayout?: boolean;
 };
 
 export default function ProtectedRoute({
   component,
   breadcrumb,
+  isVisibleLayout = true,
 }: ProtectedRouteProps) {
   const cookies = parseCookies(undefined);
   const { setBreadcrumbs } = useLayoutContext();
@@ -25,7 +27,7 @@ export default function ProtectedRoute({
   }, [breadcrumb, setBreadcrumbs]);
 
   if (isAuthenticated) {
-    return <Contant>{component}</Contant>;
+    return isVisibleLayout ? <Contant>{component}</Contant> : <>{component}</>;
   } else {
     return <Navigate to={ConstantRoutes.LOGIN} />;
   }

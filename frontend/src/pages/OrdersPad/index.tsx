@@ -10,6 +10,11 @@ import { Drawer } from "components/Drawer";
 import { Input } from "components/Input";
 import { SelectDefault } from "components/Select";
 import { ProductsProps } from "pages/Products";
+import {
+  Pagination,
+  PaginationData,
+  RefPaginationProps,
+} from "components/Pagination";
 
 import {
   formDefaultValues,
@@ -21,11 +26,6 @@ import {
   UpdateDataProps,
 } from "./validationForms";
 import { OrdersPadItem } from "./OrdersPadItem";
-import {
-  Pagination,
-  PaginationData,
-  RefPaginationProps,
-} from "components/Pagination";
 
 interface OrdersPadResponse extends PaginationData {
   search?: string;
@@ -62,7 +62,7 @@ export const OrdersPad = () => {
     setListProducts(formDefaultProduct);
     setIsUpdateData(false);
     setOpenDrawer(true);
-    reset(formDefaultProduct);
+    setValue("order_id", null);
   };
 
   const handleRemoveProduct = async (index: number) => {
@@ -150,10 +150,15 @@ export const OrdersPad = () => {
           const product_id = watch(`product_id-${itemProduct.product_id}`);
           const amount = watch(`amount-${itemProduct.product_id}`);
 
+          const priceProduct = selectProducts.find(
+            (item) => item.id === product_id
+          )?.price;
+
           return {
             product_id,
             amount: Number(amount),
             order_pad_id,
+            price: Number(priceProduct),
           } as ListProductsProps;
         });
 
@@ -173,7 +178,7 @@ export const OrdersPad = () => {
       }
       return false;
     },
-    [updateOrdersPad, watch]
+    [selectProducts, updateOrdersPad, watch]
   );
 
   const handleCreateOrderPad = useCallback(
@@ -278,7 +283,7 @@ export const OrdersPad = () => {
             </div>
             <div className="scroll-style mt-3 pl-[2px] w-full overflow-y-auto h-full max-h-[400px]">
               {listProducts.map((productItem, index) => (
-                <div className="flex items-center ml-2 justify-center mb-5 w-full">
+                <div className="flex items-center ml-[1px] justify-center mb-5 w-full">
                   <div className="w-full mr-5">
                     <SelectDefault
                       name={`product_id-${productItem.product_id}`}
@@ -287,6 +292,7 @@ export const OrdersPad = () => {
                       options={selectProducts.map((productItem) => ({
                         label: productItem.name,
                         value: productItem.id,
+                        price: productItem.price,
                       }))}
                     />
                   </div>
@@ -298,7 +304,7 @@ export const OrdersPad = () => {
                       defaultValue={productItem.amount}
                     />
                   </div>
-                  <div className="h-[40px] flex items-center ml-2 mt-4 justify-center">
+                  <div className="h-[40px] flex items-center ml-2 mt-5 justify-center">
                     <FiTrash2
                       size={20}
                       onClick={() => {
@@ -332,6 +338,7 @@ export const OrdersPad = () => {
             {listOrdersPad.map((itemOrder) => {
               const newListOrders = {
                 ...listOrders.find((order) => order.id === itemOrder.order_id),
+                ...itemOrder,
                 id: itemOrder.id,
                 order_id: itemOrder.order_id,
                 label: itemOrder.label,
