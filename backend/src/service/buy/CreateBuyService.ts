@@ -16,7 +16,7 @@ class CreateBuyService {
     });
 
     if (orderPadIsExist.length > 0) {
-      throw new Error("Order pad exist");
+      throw new Error("Order pad already exists");
     }
 
     const itemService = await prismaClient.buy.create({
