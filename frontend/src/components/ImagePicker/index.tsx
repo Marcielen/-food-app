@@ -23,7 +23,7 @@ export const ImagePicker = ({ name }: ImagePickerProps) => {
       setIsOptionsVisible(false);
     }
   }
-  console.log(valueImage);
+
   return (
     <Controller
       name={name}
