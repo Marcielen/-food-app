@@ -60,13 +60,13 @@ export const Login = () => {
               name="password"
               type="password"
               className="mb-7"
-              label="Senha"
+              label="Password"
             />
-            <Button label="Acessar" onClick={handleSubmit} />
+            <Button label="Sing in" onClick={handleSubmit} />
             <ButtonLink
               onClick={handleRegister}
               className="mt-3 text-[12px]"
-              label="Registrar nova conta"
+              label="New account registrar"
             />
           </div>
         </div>

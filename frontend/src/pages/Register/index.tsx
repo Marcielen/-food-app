@@ -56,11 +56,11 @@ export const Register = () => {
               className="mb-7"
               label="Password"
             />
-            <Button label="Acessar" onClick={handleCreateUser} />
+            <Button label="Register" onClick={handleCreateUser} />
             <ButtonLink
               onClick={handleLogin}
               className="mt-3 text-[12px]"
-              label="Já possuo uma conta"
+              label="I already have an account"
             />
           </div>
         </div>

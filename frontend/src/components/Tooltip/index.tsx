@@ -13,6 +13,7 @@ export const Tooltip = ({ description, id }: TooltipProps) => {
         color: "#0c0116",
         fontWeight: "bold",
       }}
+      className="z-40"
       id={id}
       place="right"
       content={description}

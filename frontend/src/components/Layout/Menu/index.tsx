@@ -8,13 +8,15 @@ import {
   HiOutlineClipboardDocumentList,
 } from "react-icons/hi2";
 
-import { signOut, useAuthContext } from "contexts/AuthContext";
+import { useAuthContext } from "contexts/AuthContext";
 import { ConstantRoutes } from "constants/constantsRoutes";
 import { useLayoutContext } from "contexts/LayoutContext";
 
 import { Tooltip } from "components/Tooltip";
 
 import { ItemMenu } from "./ItemMenu";
+import { destroyCookie } from "nookies";
+import { useNavigate } from "react-router-dom";
 
 export const Menu = () => {
   const [openMenu, setOpenMenu] = useState(true);
@@ -22,9 +24,16 @@ export const Menu = () => {
   const { valueUser } = useAuthContext();
   const { setMenuIsOpen } = useLayoutContext();
 
+  const navigate = useNavigate();
+
   const nameUser = valueUser?.name || "";
 
   const initialLetter = nameUser.slice(0, 1);
+
+  function signOut() {
+    destroyCookie(undefined, "@auth.token");
+    navigate(ConstantRoutes.LOGIN);
+  }
 
   return (
     <div

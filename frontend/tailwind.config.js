@@ -9,7 +9,6 @@ export default {
         purple: "#81007F",
         secondary: "#FF7426",
       },
-
       fontFamily: {
         sora: ["Sora", "sans-serif"],
       },

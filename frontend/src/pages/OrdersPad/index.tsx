@@ -131,6 +131,7 @@ export const OrdersPad = () => {
       setOpenDrawer(true);
       setValue("order_id", { label: data.label, value: data.id });
       setOrderPadId(data.order_pad_id);
+      setListProducts(formDefaultProduct);
     },
     [setValue]
   );
@@ -150,15 +151,17 @@ export const OrdersPad = () => {
           const product_id = watch(`product_id-${itemProduct.product_id}`);
           const amount = watch(`amount-${itemProduct.product_id}`);
 
-          const priceProduct = selectProducts.find(
+          const itemSelectProducts = selectProducts.find(
             (item) => item.id === product_id
-          )?.price;
+          );
 
           return {
             product_id,
             amount: Number(amount),
             order_pad_id,
-            price: Number(priceProduct),
+            price: Number(itemSelectProducts?.price),
+            banner: itemSelectProducts?.banner,
+            name: itemSelectProducts?.name,
           } as ListProductsProps;
         });
 

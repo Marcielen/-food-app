@@ -18,6 +18,7 @@ type LayoutContextData = {
   setMenuIsOpen: Dispatch<SetStateAction<boolean>>;
   itemsPay: ListItemsPay[];
   setItemsPay: (value: SetStateAction<ListItemsPay[]>) => void;
+  getDataBuy: () => Promise<void>;
 };
 
 type LayoutProviderProps = {
@@ -63,6 +64,7 @@ export const LayoutProvider = ({ children }: LayoutProviderProps) => {
         setMenuIsOpen,
         itemsPay,
         setItemsPay,
+        getDataBuy,
       }}
     >
       {children}

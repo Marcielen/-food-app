@@ -20,6 +20,7 @@ import {
 } from "components/Pagination";
 
 import { FormDefaultValues, yupResolver, FormDataProps } from "./validateForms";
+import { InputNumber } from "components/Input/InputNumber";
 
 export type ProductsProps = {
   banner?: string;
@@ -208,11 +209,11 @@ export const Products = () => {
             <ImagePicker name="file" />
             <Input name="name" label="Name product" placeholder="Pizza" />
             <div className="mt-5">
-              <Input
+              <InputNumber
                 name="price"
                 type="number"
                 label="Price product"
-                placeholder="R$"
+                placeholder="0,00"
               />
             </div>
             <div className="mt-5">

@@ -17,6 +17,7 @@ import { ProductsProps } from "pages/Products";
 import { Input } from "components/Input";
 import { Button } from "components/Button";
 import { useNavigate } from "react-router-dom";
+import { useLayoutContext } from "contexts/LayoutContext";
 
 type ModalDetailProductsProps = {
   open: boolean;
@@ -51,6 +52,8 @@ export const ModalDetailProducts = ({
   const { setValue, watch } = useFormContext();
 
   const navigate = useNavigate();
+
+  const { getDataBuy } = useLayoutContext();
 
   const amountWatch = watch("amount");
 
@@ -127,7 +130,7 @@ export const ModalDetailProducts = ({
   );
 
   const handlePayOrderPad = useCallback(async () => {
-    const response = await api.post<void, ResponseApi>(
+    const response = await api.post<void, ResponseApi<{ id: string }>>(
       EnumWebServices.BUY_CREATE,
       { order_pad_id, price, name: labelOrderPad }
     );
@@ -140,9 +143,14 @@ export const ModalDetailProducts = ({
 
       if (responseOrderPad.sucess) {
         onClose();
-
+        getDataBuy();
         navigate(
-          SubstituteRouteParameter(ConstantRoutes.PAY, "id", order_pad_id)
+          SubstituteRouteParameter(ConstantRoutes.PAY, "id", order_pad_id),
+          {
+            state: {
+              id: response?.data.id,
+            },
+          }
         );
       }
     }

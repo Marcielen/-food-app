@@ -14,12 +14,17 @@ import {
   SubstituteRouteParameter,
 } from "constants/constantsRoutes";
 import { useNavigate } from "react-router-dom";
+import { FiChevronLeft } from "react-icons/fi";
 
 type HeaderProps = {
   isVisiblePay?: boolean;
+  isNotLayout?: boolean;
 };
 
-export const Header = ({ isVisiblePay = true }: HeaderProps) => {
+export const Header = ({
+  isVisiblePay = true,
+  isNotLayout = false,
+}: HeaderProps) => {
   const [openDrawer, setOpenDrawer] = useState(false);
 
   const { breadcrumbs, itemsPay, setItemsPay } = useLayoutContext();
@@ -54,12 +59,12 @@ export const Header = ({ isVisiblePay = true }: HeaderProps) => {
   };
 
   const handlePay = () => {
-    const orderPad = itemsPay.find((item) => item.isChecked);
+    const listPaySelected = itemsPay.find((item) => item.isChecked);
 
     const route = SubstituteRouteParameter(
       ConstantRoutes.PAY,
       "id",
-      orderPad?.order_pad_id || ""
+      listPaySelected?.order_pad_id || ""
     );
 
     setItemsPay((prev) =>
@@ -69,14 +74,31 @@ export const Header = ({ isVisiblePay = true }: HeaderProps) => {
       }))
     );
 
-    setValue(`isOrderConfirmation-${orderPad?.order_pad_id}`, false);
+    setValue(`isOrderConfirmation-${listPaySelected?.order_pad_id}`, false);
 
-    navigate(route);
+    navigate(route, {
+      state: {
+        id: listPaySelected?.id,
+      },
+    });
   };
 
   return (
-    <div className=" flex-col-reverse sm:flex-row flex font-bold overflow-x-hidden overflow-y-hidden text-secondary h-[64px] px-[1%] items-start sm:items-center border-b-2 justify-between w-full">
+    <div
+      className={`${
+        isNotLayout ? "flex" : "flex-col-reverse"
+      }  sm:flex-row flex font-bold overflow-x-hidden overflow-y-hidden text-secondary h-[64px] px-[1%] ${
+        isNotLayout ? "items-center" : "items-start"
+      }  sm:items-center border-b-2 justify-between w-full`}
+    >
       <div className="flex">
+        {isNotLayout && (
+          <FiChevronLeft
+            onClick={() => navigate(ConstantRoutes.DASHBOARD)}
+            size={30}
+            className="text-black mt-1 cursor-pointer"
+          />
+        )}
         <p className="text-lg whitespace-nowrap ">
           {isMobile
             ? breadcrumbs
@@ -93,15 +115,15 @@ export const Header = ({ isVisiblePay = true }: HeaderProps) => {
             {itemsPay.length > 0 && (
               <div
                 onClick={handleOpenDrawer}
-                className="absolute top-[5px] text-primary font-bold cursor-pointer right-[17px] text-[9px]"
+                className="absolute top-[17px] lg:top-[5px] text-primary font-bold cursor-pointer right-[17px] text-[9px]"
               >
                 {itemsPay.length}
               </div>
             )}
-            <AiOutlineShoppingCart size={28} className="mr-2" />
+            <AiOutlineShoppingCart size={28} className="mr-2 mt-3 lg:mt-0" />
           </div>
         )}
-        <img className="w-[120px] pt-3 sm:pt-0 " src={Logo} alt="Logo" />
+        <img className="w-[120px] pt-3 sm:pt-0" src={Logo} alt="Logo" />
       </div>
       <FormProvider {...formMethods}>
         <Drawer

@@ -10,7 +10,7 @@ export const FormDefaultValues = {
   category_id: null,
   description: "",
   id: "",
-  file: {} as File,
+  file: undefined,
 };
 
 type AnyPresentValue = string | null;

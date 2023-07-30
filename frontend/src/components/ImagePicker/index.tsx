@@ -23,7 +23,7 @@ export const ImagePicker = ({ name }: ImagePickerProps) => {
       setIsOptionsVisible(false);
     }
   }
-
+  console.log(valueImage);
   return (
     <Controller
       name={name}
@@ -42,7 +42,7 @@ export const ImagePicker = ({ name }: ImagePickerProps) => {
                     : URL.createObjectURL(image)
                 }
                 alt="image product"
-                className="object-cover w-full h-full"
+                className="object-cover rounded-md w-full h-full"
               />
             ) : (
               <div className="text-gray-400 flex h-full justify-center items-center">
