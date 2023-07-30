@@ -45,7 +45,7 @@ export const OrdersPadItem = ({
 
       if (response.sucess) {
         getDataOrdersPad();
-        toast.success("Product delected");
+        toast.success("Product deleted successfully");
       }
     },
     [getDataOrdersPad]

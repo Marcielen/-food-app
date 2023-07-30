@@ -66,7 +66,7 @@ export const Orders = () => {
 
     if (response.sucess) {
       refPagination.current?.reload();
-      toast.success("Product delected");
+      toast.success("Product deleted successfully");
     }
   }, []);
 

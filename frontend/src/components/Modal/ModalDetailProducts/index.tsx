@@ -122,7 +122,7 @@ export const ModalDetailProducts = ({
       );
 
       if (response.sucess) {
-        toast.success("Product ");
+        toast.success("Product has been updated successfully");
         handleUpdateValueAmount(index);
       }
     },
