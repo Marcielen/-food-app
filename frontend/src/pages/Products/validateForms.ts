@@ -13,12 +13,10 @@ export const FormDefaultValues = {
   file: undefined,
 };
 
-type AnyPresentValue = string | null;
-
 export type FormDataProps = {
   name: string;
   price: string;
-  category_id: AnyPresentValue;
+  category_id: string | null;
   description: string;
   file?: string | File;
   id?: string;

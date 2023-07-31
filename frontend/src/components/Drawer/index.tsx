@@ -50,7 +50,7 @@ export function Drawer({
                 typeConfirm
                 disabled={disabled}
                 label="Confirm"
-                onClick={handleSubmit}
+                onClick={() => handleSubmit()}
                 className=" rounded-[12px] font-bold h-[32px] ml-4 text-white pb-8 bg-green-500"
               />
             </div>

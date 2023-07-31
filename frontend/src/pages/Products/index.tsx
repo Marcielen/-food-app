@@ -144,7 +144,6 @@ export const Products = () => {
   );
 
   const createProduct = onSubmit(async (data) => {
-    setIsLoading(true);
     const valueData = new FormData();
 
     valueData.append("name", data.name);
@@ -178,7 +177,6 @@ export const Products = () => {
       reset(FormDefaultValues);
       setIsLoading(false);
     }
-    setIsLoading(false);
   });
 
   const handleOpenDrawer = () => {
@@ -211,7 +209,7 @@ export const Products = () => {
           <Drawer
             open={openDrawer}
             onClose={() => setOpenDrawer(false)}
-            handleSubmit={createProduct}
+            handleSubmit={() => createProduct()}
             disabled={isLoading}
             label="Create product"
           >

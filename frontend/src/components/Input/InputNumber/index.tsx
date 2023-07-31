@@ -60,13 +60,13 @@ export const InputNumber = ({
   }
 
   const formatValue = (value: string) => {
-    const cleanValue = value.replace(/[^\d]/g, "");
-    const integerPart = cleanValue.slice(0, -2);
-    const decimalPart = cleanValue.slice(-2);
+    const cleanValue = value?.replace(/[^\d]/g, "");
+    const integerPart = cleanValue?.slice(0, -2);
+    const decimalPart = cleanValue?.slice(-2);
 
     let formattedValue =
-      (integerPart.length > 0 ? integerPart : "0") +
-      (decimalPart.length > 0 ? "." + decimalPart : "");
+      (integerPart?.length > 0 ? integerPart : "0") +
+      (decimalPart?.length > 0 ? "." + decimalPart : "");
 
     formattedValue = formatNumberWithPoints(formattedValue);
     return formattedValue;

@@ -28,8 +28,10 @@ export const Input = ({
   const {
     formState: { errors },
     setValue,
+    watch,
   } = useFormContext();
-
+  const valueInput = watch(name);
+  const valueIsUndefined = valueInput === undefined || valueInput === "";
   const messageErros = errors[name]?.message;
 
   useEffect(() => {
@@ -75,7 +77,7 @@ export const Input = ({
               onChange={onChange}
             />
 
-            {messageErros && (
+            {valueIsUndefined && (
               <div className="text-xs text-red-600">
                 {messageErros as string}
               </div>
