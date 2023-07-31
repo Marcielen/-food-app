@@ -2,7 +2,7 @@ import { useEffect, useCallback, useState } from "react";
 
 import { EnumWebServices } from "constants/webServices";
 import { api } from "service/api";
-import { DecimalMask } from "helpers/decimalMask";
+import { DecimalMask, validateNumberMask } from "helpers/decimalMask";
 
 export const Dashboard = () => {
   const [valuePay, setValuePay] = useState<{ price: number }[]>([]);
@@ -13,7 +13,7 @@ export const Dashboard = () => {
   }, []);
 
   const price = valuePay.reduce((acc, curr) => {
-    return acc + curr.price;
+    return acc + validateNumberMask(curr.price);
   }, 0);
 
   useEffect(() => {

@@ -10,3 +10,8 @@ export const DecimalMask = (value: string | number): string => {
 export const MoneyMask = (value: string | number): string => {
   return `$${value}`;
 };
+
+export const validateNumberMask = (value: string | number) => {
+  const newValue = Number(String(value).replaceAll(",", ""));
+  return newValue;
+};

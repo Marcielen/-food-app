@@ -5,7 +5,7 @@ import prismaClient from "../../prisma";
 type CreatePayProps = {
   order_pad_id: string;
   idUser: string;
-  price: number;
+  price: string;
 };
 
 class CreatePayService {

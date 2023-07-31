@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "pay" ALTER COLUMN "price" SET DATA TYPE TEXT;

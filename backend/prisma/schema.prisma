@@ -54,7 +54,7 @@ model Product {
 model Buy {
   idUser String
   id String @id @default(uuid())
-  price Int
+  price String
   order_pad_id String
   name String?
   
@@ -106,7 +106,7 @@ model orderPadProduct {
 model pay {
   id String @id @default(uuid())
   order_pad_id String
-  price Int
+  price String
 
   idUser  String
   created_at  DateTime? @default(now())

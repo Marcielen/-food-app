@@ -7,7 +7,11 @@ import * as Dialog from "@radix-ui/react-dialog";
 
 import { ResponseApi, api } from "service/api";
 import { EnumWebServices } from "constants/webServices";
-import { DecimalMask } from "helpers/decimalMask";
+import {
+  DecimalMask,
+  MoneyMask,
+  validateNumberMask,
+} from "helpers/decimalMask";
 import {
   ConstantRoutes,
   SubstituteRouteParameter,
@@ -60,7 +64,7 @@ export const ModalDetailProducts = ({
   const amountWatch = watch("amount");
 
   const price = listDetailProduct.reduce((acc, curr) => {
-    return acc + curr.totalPrice * curr.amount;
+    return acc + validateNumberMask(curr.totalPrice) * curr.amount;
   }, 0);
 
   const getDataProducts = useCallback(async () => {
@@ -135,7 +139,7 @@ export const ModalDetailProducts = ({
     setIsLoading(true);
     const response = await api.post<void, ResponseApi<{ id: string }>>(
       EnumWebServices.BUY_CREATE,
-      { order_pad_id, price, name: labelOrderPad }
+      { order_pad_id, price: String(price), name: labelOrderPad }
     );
 
     if (response.sucess) {
@@ -159,6 +163,7 @@ export const ModalDetailProducts = ({
       }
       setIsLoading(false);
     }
+    setIsLoading(false);
   }, [getDataBuy, labelOrderPad, navigate, onClose, order_pad_id, price]);
 
   useEffect(() => {
@@ -181,56 +186,63 @@ export const ModalDetailProducts = ({
 
           <div className=" h-full max-h-[60%]   overflow-auto">
             {listDetailProduct.map(
-              ({ isUpdate, id, totalPrice, amount }, index) => (
-                <div className="w-full flex mb-2 ">
-                  <div className="w-[50%] mr-6">
-                    <Input
-                      name={`product.${index}`}
-                      isDisabled
-                      label="Product"
-                    />
-                  </div>
-                  <div className="w-[35%] flex">
-                    <div className="w-[70%]">
+              ({ isUpdate, id, totalPrice, amount }, index) => {
+                return (
+                  <div className="w-full flex mb-2 ">
+                    <div className="w-[50%] mr-6">
                       <Input
-                        name={`amount.${index}`}
-                        isDisabled={!isUpdate}
-                        label="Amount"
-                        type="number"
+                        name={`product.${index}`}
+                        isDisabled
+                        label="Product"
                       />
                     </div>
-                    <div className="flex h-[50px] w-[20%] hover:underline text-gray-600 cursor-pointer items-end">
-                      <div className="ml-[8px]">
-                        {isUpdate ? (
-                          <div className="flex">
-                            <HiMiniCheckCircle
-                              onClick={() => handleUpdateProduct({ id, index })}
-                              size={26}
-                              className="mt-4 cursor-pointer text-green-500"
-                            />
-                            <HiMiniXCircle
+                    <div className="w-[35%] flex">
+                      <div className="w-[70%]">
+                        <Input
+                          name={`amount.${index}`}
+                          isDisabled={!isUpdate}
+                          label="Amount"
+                          type="number"
+                        />
+                      </div>
+                      <div className="flex h-[50px] w-[20%] hover:underline text-gray-600 cursor-pointer items-end">
+                        <div className="ml-[8px]">
+                          {isUpdate ? (
+                            <div className="flex">
+                              <HiMiniCheckCircle
+                                onClick={() =>
+                                  handleUpdateProduct({ id, index })
+                                }
+                                size={26}
+                                className="mt-4 cursor-pointer text-green-500"
+                              />
+                              <HiMiniXCircle
+                                onClick={() => handleUpdateValueAmount(index)}
+                                size={26}
+                                className="mt-4 cursor-pointer text-red-500"
+                              />
+                            </div>
+                          ) : (
+                            <FiEdit
                               onClick={() => handleUpdateValueAmount(index)}
-                              size={26}
-                              className="mt-4 cursor-pointer text-red-500"
+                              size={20}
+                              className=" cursor-pointer hover:text-green-500"
                             />
-                          </div>
-                        ) : (
-                          <FiEdit
-                            onClick={() => handleUpdateValueAmount(index)}
-                            size={20}
-                            className=" cursor-pointer hover:text-green-500"
-                          />
-                        )}
+                          )}
+                        </div>
                       </div>
                     </div>
+                    <div className="w-[16%] pl-1 h-[50px]">
+                      <p className="mt-7 font-bold text-md">
+                        {DecimalMask(
+                          validateNumberMask(totalPrice) *
+                            (amountWatch[index] || amount)
+                        )}
+                      </p>
+                    </div>
                   </div>
-                  <div className="w-[16%] pl-1 h-[50px]">
-                    <p className="mt-7 font-bold text-md">
-                      {DecimalMask(totalPrice * (amountWatch[index] || amount))}
-                    </p>
-                  </div>
-                </div>
-              )
+                );
+              }
             )}
           </div>
 

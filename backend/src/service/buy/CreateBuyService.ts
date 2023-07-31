@@ -3,7 +3,7 @@ import { Prisma } from "@prisma/client";
 import prismaClient from "../../prisma";
 
 type CreateBuyProps = {
-  price: number;
+  price: string;
   order_pad_id: string;
   idUser: string;
   name: string;

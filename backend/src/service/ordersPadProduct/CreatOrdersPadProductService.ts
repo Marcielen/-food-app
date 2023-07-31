@@ -5,7 +5,7 @@ type CreateOrdersPadProductServiceProps = {
   idUser: string;
   product_id: string;
   amount: number;
-  price: number;
+  price: string;
   banner: string;
   name: string;
 };

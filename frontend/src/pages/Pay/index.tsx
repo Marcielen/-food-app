@@ -2,7 +2,7 @@ import { Button } from "components/Button";
 import { Header } from "components/Layout/Header";
 import { ModalFormOfPayment } from "components/Modal/ModalFormOfPayment";
 import { EnumWebServices } from "constants/webServices";
-import { DecimalMask } from "helpers/decimalMask";
+import { DecimalMask, validateNumberMask } from "helpers/decimalMask";
 import { useCallback, useEffect, useState } from "react";
 import { IoFastFoodOutline } from "react-icons/io5";
 import { useParams } from "react-router-dom";
@@ -41,7 +41,7 @@ export const Pay = () => {
   }, [params]);
 
   const price = listProducts.reduce((acc, curr) => {
-    return acc + curr.totalPrice * curr.amount;
+    return acc + validateNumberMask(curr.totalPrice) * curr.amount;
   }, 0);
 
   const handleOpenModalFormOfPayment = () => {
@@ -73,7 +73,7 @@ export const Pay = () => {
                 <div className="text-black ml-3 mt-3">
                   <p>{product.name}</p>
                   <p className="text-lg font-bold text-green-500">
-                    {DecimalMask(product.totalPrice)}
+                    {DecimalMask(validateNumberMask(product.totalPrice))}
                   </p>
                   <p className="text-gray-500">{product.amount}x</p>
                 </div>
@@ -93,7 +93,7 @@ export const Pay = () => {
           </div>
           <ModalFormOfPayment
             open={openModal}
-            price={price}
+            price={String(price)}
             onClose={() => {
               setOpenModal(false);
             }}

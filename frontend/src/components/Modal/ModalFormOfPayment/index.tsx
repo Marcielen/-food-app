@@ -29,7 +29,7 @@ import { Loading } from "components/Loading";
 type ModalFormOfPaymentProps = {
   open: boolean;
   onClose: () => void;
-  price: number;
+  price: string;
 };
 
 export type DetailProductProps = {
