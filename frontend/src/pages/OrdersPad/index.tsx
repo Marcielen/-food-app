@@ -200,7 +200,9 @@ export const OrdersPad = () => {
 
       if (responseDataOrderPad.sucess) {
         await updateProduct(responseDataOrderPad.data);
+        setIsLoading(false);
       }
+      setIsLoading(false);
       return false;
     },
     [updateProduct]
@@ -226,7 +228,6 @@ export const OrdersPad = () => {
     }
 
     if (sucess) {
-      setIsLoading(false);
       getDataOrder();
       setOpenDrawer(false);
       setListProducts(formDefaultProduct);
