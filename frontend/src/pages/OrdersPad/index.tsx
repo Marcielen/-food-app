@@ -161,7 +161,7 @@ export const OrdersPad = () => {
             product_id,
             amount: Number(amount),
             order_pad_id,
-            price: Number(itemSelectProducts?.price),
+            price: String(itemSelectProducts?.price),
             banner: itemSelectProducts?.banner,
             name: itemSelectProducts?.name,
           } as ListProductsProps;

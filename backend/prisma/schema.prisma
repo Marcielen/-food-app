@@ -91,7 +91,7 @@ model orderPadProduct {
   order_pad_id String
   product_id String
   amount Int
-  totalPrice Float?
+  totalPrice String?
   
   idUser  String
   banner String?

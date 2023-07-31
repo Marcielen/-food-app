@@ -32,7 +32,7 @@ export type ListProductsProps = {
   amount: number;
   order_pad_id?: string;
   id?: string;
-  price?: number;
+  price?: number | string;
 };
 
 export const formDefaultProduct = [
