@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 
 import { EnumWebServices } from "constants/webServices";
 import { ResponseApi, api } from "service/api";
-import { DecimalMask } from "helpers/decimalMask";
+import { DecimalMask, MoneyMask } from "helpers/decimalMask";
 
 import { Button } from "components/Button";
 import { Drawer } from "components/Drawer";
@@ -209,12 +209,7 @@ export const Products = () => {
             <ImagePicker name="file" />
             <Input name="name" label="Name product" placeholder="Pizza" />
             <div className="mt-5">
-              <InputNumber
-                name="price"
-                type="number"
-                label="Price product"
-                placeholder="0,00"
-              />
+              <InputNumber name="price" type="number" label="Price product" />
             </div>
             <div className="mt-5">
               <Input name="description" label="Description product" />
@@ -268,7 +263,7 @@ export const Products = () => {
                       {itemProduct.name}
                     </p>
                     <p className="text-green-500 font-bold text-[16px]">
-                      {DecimalMask(itemProduct.price)}
+                      {MoneyMask(itemProduct.price)}
                     </p>
                     <p className="text-gray-500  text-[12px]">
                       {itemProduct?.description}

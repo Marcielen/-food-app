@@ -1,32 +1,22 @@
-import { useEffect } from "react";
+import { ChangeEvent, useEffect } from "react";
 import { Controller, useFormContext } from "react-hook-form";
-import { NumericFormat } from "react-number-format";
-import { HiMagnifyingGlass } from "react-icons/hi2";
 
 type InputProps = {
   label?: string;
   name: string;
   type?: string;
   className?: string;
-  leftElement?: boolean;
-  placeholder?: string;
   isDisabled?: boolean;
   defaultValue?: string | number;
-  onEnterKeyPress?: (value: string) => void;
   decimalScale?: number;
 };
 
 export const InputNumber = ({
   label,
   name,
-  type,
   className,
   isDisabled = false,
-  onEnterKeyPress,
-  leftElement,
-  placeholder,
   defaultValue,
-  decimalScale = 2,
 }: InputProps) => {
   const {
     formState: { errors },
@@ -35,9 +25,55 @@ export const InputNumber = ({
 
   const messageErros = errors[name]?.message;
 
+  function formatNumberWithPoints(value: string): string {
+    const regexWithSingleZero = /^0\d/;
+
+    const splitDecimal = value.split(".");
+    const integerPart = splitDecimal[0];
+    const decimalPart = splitDecimal[1];
+
+    let valueIntegerPart = integerPart;
+
+    if (regexWithSingleZero.test(integerPart)) {
+      valueIntegerPart =
+        integerPart.split("0")[1] === "" ? "0" : integerPart.split("0")[1];
+    }
+
+    let formattedIntegerPart = valueIntegerPart
+      .split("")
+      .reverse()
+      .map((digit, index) => {
+        return digit + (index > 0 && index % 3 === 0 ? "," : "");
+      })
+      .reverse()
+      .join("");
+
+    if (formattedIntegerPart.startsWith(".")) {
+      formattedIntegerPart = formattedIntegerPart.slice(1);
+    }
+
+    const formattedValue = decimalPart
+      ? `${formattedIntegerPart}.${decimalPart}`
+      : formattedIntegerPart;
+
+    return formattedValue;
+  }
+
+  const formatValue = (value: string) => {
+    const cleanValue = value.replace(/[^\d]/g, "");
+    const integerPart = cleanValue.slice(0, -2);
+    const decimalPart = cleanValue.slice(-2);
+
+    let formattedValue =
+      (integerPart.length > 0 ? integerPart : "0") +
+      (decimalPart.length > 0 ? "." + decimalPart : "");
+
+    formattedValue = formatNumberWithPoints(formattedValue);
+    return formattedValue;
+  };
+
   useEffect(() => {
     setValue(name, defaultValue);
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [defaultValue, setValue]);
 
@@ -45,7 +81,7 @@ export const InputNumber = ({
     <Controller
       name={name}
       defaultValue={defaultValue}
-      render={({ field: { onChange, onBlur, value, ref } }) => {
+      render={({ field: { onBlur, value, ref } }) => {
         return (
           <div className={`${className} relative`}>
             {label && (
@@ -60,35 +96,15 @@ export const InputNumber = ({
               </div>
             </div>
 
-            <NumericFormat
-              thousandSeparator="."
-              decimalSeparator=","
-              decimalScale={decimalScale}
-              allowNegative={false}
-              allowLeadingZeros={false}
-              fixedDecimalScale={true}
-              customInput={(inputProps) => (
-                <input
-                  ref={ref}
-                  onKeyUp={(e: React.KeyboardEvent<HTMLInputElement>) => {
-                    if (e.key === "Enter" && onEnterKeyPress) {
-                      e.currentTarget.value = e.currentTarget.value.trim();
-
-                      onEnterKeyPress(e.currentTarget.value);
-                    }
-                  }}
-                  onBlur={onBlur}
-                  disabled={isDisabled}
-                  value={value}
-                  type={type}
-                  placeholder={placeholder}
-                  className={`px-2 ${
-                    leftElement ? "pl-9" : ""
-                  } text-right bg-transparent disabled:bg-gray-300 disabled:text-black rounded-md w-full border-2 border-gray-300  py-1 focus:outline-none  transition-black peer`}
-                  onChange={onChange}
-                  {...inputProps}
-                />
-              )}
+            <input
+              ref={ref}
+              onBlur={onBlur}
+              value={formatValue(value)}
+              disabled={isDisabled}
+              className={`px-2 text-right bg-transparent disabled:bg-gray-300 disabled:text-black rounded-md w-full border-2 border-gray-300  py-1 focus:outline-none  transition-black peer`}
+              onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                setValue(name, formatValue(e.target.value)); // Atualize o valor usando setValue do useFormContext
+              }}
             />
 
             {messageErros && (
