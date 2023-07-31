@@ -226,11 +226,11 @@ export const OrdersPad = () => {
     }
 
     if (sucess) {
+      setIsLoading(false);
       getDataOrder();
       setOpenDrawer(false);
       setListProducts(formDefaultProduct);
       reset(formDefaultValues);
-      setIsLoading(false);
     }
     setIsLoading(false);
   });
