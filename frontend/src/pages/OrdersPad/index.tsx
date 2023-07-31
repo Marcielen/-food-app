@@ -26,6 +26,7 @@ import {
   UpdateDataProps,
 } from "./validationForms";
 import { OrdersPadItem } from "./OrdersPadItem";
+import { Loading } from "components/Loading";
 
 interface OrdersPadResponse extends PaginationData {
   search?: string;
@@ -41,6 +42,7 @@ export const OrdersPad = () => {
   const [totalCount, setTotalCount] = useState(0);
   const [isUpdateData, setIsUpdateData] = useState(false);
   const [openDrawer, setOpenDrawer] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const refPagination = useRef<RefPaginationProps>({} as RefPaginationProps);
 
@@ -212,6 +214,7 @@ export const OrdersPad = () => {
   );
 
   const handleConfirm = onSubmit(async (data) => {
+    setIsLoading(true);
     let sucess;
 
     if (isUpdateData) {
@@ -227,7 +230,9 @@ export const OrdersPad = () => {
       setOpenDrawer(false);
       setListProducts(formDefaultProduct);
       reset(formDefaultValues);
+      setIsLoading(false);
     }
+    setIsLoading(false);
   });
 
   useEffect(() => {
@@ -241,6 +246,7 @@ export const OrdersPad = () => {
   return (
     <FormProvider {...formMethods}>
       <div className="flex flex-col lg:flex-row justify-between">
+        {isLoading && <Loading />}
         <div>
           <Input
             name="search"
@@ -252,7 +258,9 @@ export const OrdersPad = () => {
           <Drawer
             open={openDrawer}
             onClose={() => setOpenDrawer(false)}
-            disabled={orderIdWatch === undefined && !isUpdateData}
+            disabled={
+              (orderIdWatch === undefined && !isUpdateData) || isLoading
+            }
             handleSubmit={() => {
               handleConfirm();
             }}

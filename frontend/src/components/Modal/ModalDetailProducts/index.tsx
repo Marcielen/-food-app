@@ -18,6 +18,7 @@ import { Input } from "components/Input";
 import { Button } from "components/Button";
 import { useNavigate } from "react-router-dom";
 import { useLayoutContext } from "contexts/LayoutContext";
+import { Loading } from "components/Loading";
 
 type ModalDetailProductsProps = {
   open: boolean;
@@ -48,6 +49,7 @@ export const ModalDetailProducts = ({
   const [listDetailProduct, setListDetailProduct] = useState<
     DetailProductProps[]
   >([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const { setValue, watch } = useFormContext();
 
@@ -130,6 +132,7 @@ export const ModalDetailProducts = ({
   );
 
   const handlePayOrderPad = useCallback(async () => {
+    setIsLoading(true);
     const response = await api.post<void, ResponseApi<{ id: string }>>(
       EnumWebServices.BUY_CREATE,
       { order_pad_id, price, name: labelOrderPad }
@@ -144,6 +147,7 @@ export const ModalDetailProducts = ({
       if (responseOrderPad.sucess) {
         onClose();
         getDataBuy();
+        setIsLoading(false);
         navigate(
           SubstituteRouteParameter(ConstantRoutes.PAY, "id", order_pad_id),
           {
@@ -153,8 +157,9 @@ export const ModalDetailProducts = ({
           }
         );
       }
+      setIsLoading(false);
     }
-  }, [labelOrderPad, navigate, onClose, order_pad_id, price]);
+  }, [getDataBuy, labelOrderPad, navigate, onClose, order_pad_id, price]);
 
   useEffect(() => {
     if (open && order_pad_id) {
@@ -164,6 +169,7 @@ export const ModalDetailProducts = ({
 
   return (
     <Dialog.Root open={open} onOpenChange={onClose}>
+      {isLoading && <Loading />}
       <Dialog.Portal>
         <Dialog.Overlay className="bg-[rgba(0,_0,_0,_0.5)] data-[state=open] fixed inset-0" />
         <Dialog.Content className="data-[state=open] z-20 fixed top-[50%] left-[50%] h-screen w-full lg:h-[450px] lg:max-w-[670px] max-w-[full] translate-x-[-50%] translate-y-[-50%] rounded-[6px] bg-white p-[25px] shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none">
@@ -248,6 +254,7 @@ export const ModalDetailProducts = ({
               <div className="w-[120px] mr-4">
                 <Button
                   typeConfirm
+                  disabled={isLoading}
                   onClick={handlePayOrderPad}
                   label="Pay"
                   className=" rounded-[12px] font-bold h-[32px] ml-4 text-white pb-8 bg-green-500"

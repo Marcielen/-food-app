@@ -24,6 +24,7 @@ import { Input } from "components/Input";
 import { Button } from "components/Button";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useLayoutContext } from "contexts/LayoutContext";
+import { Loading } from "components/Loading";
 
 type ModalFormOfPaymentProps = {
   open: boolean;
@@ -67,6 +68,7 @@ export const ModalFormOfPayment = ({
   price,
 }: ModalFormOfPaymentProps) => {
   const [listPayment, setListPayment] = useState(formOfPayment);
+  const [isLoading, setIsLoading] = useState(false);
 
   const { getDataBuy } = useLayoutContext();
 
@@ -86,6 +88,7 @@ export const ModalFormOfPayment = ({
   const isPaymentChecked = listPayment.some((payment) => payment.isChecked);
 
   const handlePay = useCallback(async () => {
+    setIsLoading(true);
     const response = await api.post<void, ResponseApi>(
       EnumWebServices.PAY_CREATE,
       { order_pad_id: id, price }
@@ -101,12 +104,15 @@ export const ModalFormOfPayment = ({
 
       toast.success("Payment made successfully");
       getDataBuy();
+      setIsLoading(false);
       navidate(ConstantRoutes.DASHBOARD);
     }
+    setIsLoading(false);
   }, [navidate, id, price, getDataBuy, state]);
 
   return (
     <Dialog.Root open={open} onOpenChange={onClose}>
+      {isLoading && <Loading />}
       <Dialog.Portal>
         <Dialog.Overlay className="bg-[rgba(0,_0,_0,_0.5)] data-[state=open] fixed inset-0" />
         <Dialog.Content className="data-[state=open] z-20 fixed top-[50%] left-[50%] h-screen w-full lg:h-[350px] lg:max-w-[670px] max-w-[full] translate-x-[-50%] translate-y-[-50%] rounded-[6px] bg-white p-[25px] shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none">
@@ -153,7 +159,7 @@ export const ModalFormOfPayment = ({
               <div className="w-[120px]">
                 <Button
                   typeConfirm
-                  disabled={!isPaymentChecked}
+                  disabled={!isPaymentChecked || isLoading}
                   onClick={handlePay}
                   className="text-white font-normal"
                   label="Pay"

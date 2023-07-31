@@ -17,6 +17,7 @@ import {
   PaginationData,
   RefPaginationProps,
 } from "components/Pagination";
+import { Loading } from "components/Loading";
 
 export interface OrdersResponse extends PaginationData {
   search?: string;
@@ -31,6 +32,7 @@ type OrdersProps = {
 export const Orders = () => {
   const [listOrders, setListOrders] = useState<OrdersProps[]>([]);
   const [isUpdateData, setIsUpdateData] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [openDrawer, setOpenDrawer] = useState(false);
   const [totalCount, setTotalCount] = useState(0);
 
@@ -80,6 +82,7 @@ export const Orders = () => {
   );
 
   const handleConfirm = onSubmit(async (data) => {
+    setIsLoading(true);
     let response;
 
     if (isUpdateData) {
@@ -98,7 +101,9 @@ export const Orders = () => {
       refPagination.current?.reload();
       setOpenDrawer(false);
       reset(formDefaultValues);
+      setIsLoading(false);
     }
+    setIsLoading(false);
   });
 
   const handleOpenDrawe = () => {
@@ -116,6 +121,7 @@ export const Orders = () => {
   return (
     <FormProvider {...formMethods}>
       <div className="flex flex-col lg:flex-row justify-between">
+        {isLoading && <Loading />}
         <div>
           <Input
             name="search"
@@ -128,6 +134,7 @@ export const Orders = () => {
         <>
           <Drawer
             open={openDrawer}
+            disabled={isLoading}
             onClose={() => setOpenDrawer(false)}
             handleSubmit={() => {
               handleConfirm();

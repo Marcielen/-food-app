@@ -21,6 +21,7 @@ import {
 
 import { FormDefaultValues, yupResolver, FormDataProps } from "./validateForms";
 import { InputNumber } from "components/Input/InputNumber";
+import { Loading } from "components/Loading";
 
 export type ProductsProps = {
   banner?: string;
@@ -51,6 +52,7 @@ export const Products = () => {
   const [totalCount, setTotalCount] = useState(0);
   const [isUpdateData, setIsUpdateData] = useState(false);
   const [openDrawer, setOpenDrawer] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const refPagination = useRef<RefPaginationProps>({} as RefPaginationProps);
 
@@ -108,10 +110,12 @@ export const Products = () => {
 
   const createCategory = useCallback(
     async (name: string) => {
+      setIsLoading(true);
       await api.post(EnumWebServices.CATEGORY_CREATE, {
         name,
       });
       getCategory();
+      setIsLoading(false);
     },
     [getCategory]
   );
@@ -140,6 +144,7 @@ export const Products = () => {
   );
 
   const createProduct = onSubmit(async (data) => {
+    setIsLoading(true);
     const valueData = new FormData();
 
     valueData.append("name", data.name);
@@ -171,7 +176,9 @@ export const Products = () => {
       setOpenDrawer(false);
       setIsUpdateData(false);
       reset(FormDefaultValues);
+      setIsLoading(false);
     }
+    setIsLoading(false);
   });
 
   const handleOpenDrawer = () => {
@@ -191,6 +198,7 @@ export const Products = () => {
   return (
     <FormProvider {...formMethods}>
       <div className="flex flex-col lg:flex-row justify-between">
+        {isLoading && <Loading />}
         <div>
           <Input
             name="search"
@@ -204,6 +212,7 @@ export const Products = () => {
             open={openDrawer}
             onClose={() => setOpenDrawer(false)}
             handleSubmit={createProduct}
+            disabled={isLoading}
             label="Create product"
           >
             <ImagePicker name="file" />

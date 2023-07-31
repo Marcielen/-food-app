@@ -1,6 +1,6 @@
 import { FormProvider, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { parseCookies } from "nookies";
 
 import { Button } from "components/Button";
@@ -9,6 +9,7 @@ import { InputFlushed } from "components/Input/InputFlushed";
 import { Container } from "components/Layout/Container";
 import { ConstantRoutes } from "constants/constantsRoutes";
 import { useAuthContext } from "contexts/AuthContext";
+import { Loading } from "components/Loading";
 
 import { yupResolver } from "./validationForms";
 
@@ -18,6 +19,7 @@ type FormData = {
 };
 
 export const Login = () => {
+  const [isLoading, setIsLoading] = useState(false);
   const { signIn, userExpiration } = useAuthContext();
 
   const formMethods = useForm<FormData>({
@@ -37,7 +39,9 @@ export const Login = () => {
   };
 
   const handleSubmit = onSubmit((data) => {
+    setIsLoading(true);
     signIn(data);
+    setIsLoading(false);
   });
 
   useEffect(() => {
@@ -49,6 +53,7 @@ export const Login = () => {
   return (
     <Container>
       <FormProvider {...formMethods}>
+        {isLoading && <Loading />}
         <div className="flex mt-8 justify-center items-center w-full">
           <div>
             <InputFlushed
@@ -62,8 +67,13 @@ export const Login = () => {
               className="mb-7"
               label="Password"
             />
-            <Button label="Sing in" onClick={handleSubmit} />
+            <Button
+              label="Sing in"
+              disabled={isLoading}
+              onClick={handleSubmit}
+            />
             <ButtonLink
+              disabled={isLoading}
               onClick={handleRegister}
               className="mt-3 text-[12px]"
               label="New account registrar"
