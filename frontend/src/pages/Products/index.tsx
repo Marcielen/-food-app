@@ -6,22 +6,21 @@ import { toast } from "react-toastify";
 
 import { EnumWebServices } from "constants/webServices";
 import { ResponseApi, api } from "service/api";
-import { DecimalMask, MoneyMask } from "helpers/decimalMask";
+import { MoneyMask } from "helpers/decimalMask";
 
 import { Button } from "components/Button";
 import { Drawer } from "components/Drawer";
 import { Input } from "components/Input";
-import { ImagePicker } from "components/ImagePicker";
 import { Creatable } from "components/Creatable";
 import {
   Pagination,
   PaginationData,
   RefPaginationProps,
 } from "components/Pagination";
-
-import { FormDefaultValues, yupResolver, FormDataProps } from "./validateForms";
 import { InputNumber } from "components/Input/InputNumber";
 import { Loading } from "components/Loading";
+
+import { FormDefaultValues, yupResolver, FormDataProps } from "./validateForms";
 
 export type ProductsProps = {
   banner?: string;
@@ -213,7 +212,6 @@ export const Products = () => {
             disabled={isLoading}
             label="Create product"
           >
-            <ImagePicker name="file" />
             <Input name="name" label="Name product" placeholder="Pizza" />
             <div className="mt-5">
               <InputNumber name="price" type="number" label="Price product" />
