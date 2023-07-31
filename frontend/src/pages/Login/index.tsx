@@ -38,9 +38,9 @@ export const Login = () => {
     navigation(ConstantRoutes.REGISTER);
   };
 
-  const handleSubmit = onSubmit((data) => {
+  const handleSubmit = onSubmit(async (data) => {
     setIsLoading(true);
-    signIn(data);
+    await signIn(data);
     setIsLoading(false);
   });
 
