@@ -76,7 +76,7 @@ export const Login = () => {
               disabled={isLoading}
               onClick={handleRegister}
               className="mt-3 text-[12px]"
-              label="New account registrar"
+              label="New account register"
             />
           </div>
         </div>
