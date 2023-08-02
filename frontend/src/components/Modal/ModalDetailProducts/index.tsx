@@ -187,6 +187,8 @@ export const ModalDetailProducts = ({
           <div className=" h-full max-h-[60%]   overflow-auto">
             {listDetailProduct.map(
               ({ isUpdate, id, totalPrice, amount }, index) => {
+                const valueAmount =
+                  amountWatch && amountWatch[index] ? amountWatch[index] : 0;
                 return (
                   <div className="w-full flex mb-2 ">
                     <div className="w-[50%] mr-6">
@@ -236,7 +238,7 @@ export const ModalDetailProducts = ({
                       <p className="mt-7 font-bold text-md">
                         {DecimalMask(
                           validateNumberMask(totalPrice) *
-                            (amountWatch[index] || amount)
+                            (valueAmount || amount)
                         )}
                       </p>
                     </div>
