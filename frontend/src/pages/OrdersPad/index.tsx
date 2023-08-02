@@ -260,7 +260,9 @@ export const OrdersPad = () => {
             open={openDrawer}
             onClose={() => setOpenDrawer(false)}
             disabled={
-              (orderIdWatch === undefined && !isUpdateData) || isLoading
+              ((orderIdWatch === undefined || orderIdWatch === null) &&
+                !isUpdateData) ||
+              isLoading
             }
             handleSubmit={() => {
               handleConfirm();
