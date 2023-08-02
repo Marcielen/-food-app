@@ -4,7 +4,7 @@ import { useLayoutContext } from "contexts/LayoutContext";
 import Logo from "assets/logo.svg";
 import { useMediaQuery } from "hooks/useMediaQuery";
 import { Drawer } from "components/Drawer";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { IoFastFoodOutline } from "react-icons/io5";
 import { DecimalMask } from "helpers/decimalMask";
 import { Checkbox } from "components/Checkbox";
@@ -42,14 +42,10 @@ export const Header = ({
   };
 
   const isPayChecked = itemsPay.some((item) => item.isChecked);
-
+  console.log(itemsPay);
   const handleOrderIsChecked = (index: number) => {
     setItemsPay((prev) =>
       prev.map((item, indexItem) => {
-        setValue(
-          `isOrderConfirmation-${item.order_pad_id}`,
-          indexItem === index ? !item.isChecked : false
-        );
         return {
           ...item,
           isChecked: indexItem === index ? !item.isChecked : false,
@@ -82,6 +78,12 @@ export const Header = ({
       },
     });
   };
+
+  useEffect(() => {
+    itemsPay.forEach((item) => {
+      setValue(`isOrderConfirmation-${item.order_pad_id}`, item.isChecked);
+    });
+  }, [itemsPay, setValue]);
 
   return (
     <div

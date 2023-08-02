@@ -22,9 +22,7 @@ export const Checkbox = ({ name, ...rest }: CheckboxProps) => {
               onCheckedChange={onChange}
               {...rest}
             >
-              <CheckboxRadix.Indicator className="text-white">
-                <HiCheck />
-              </CheckboxRadix.Indicator>
+              {value === true && <HiCheck className="text-white" />}
             </CheckboxRadix.Root>
           </div>
         );
