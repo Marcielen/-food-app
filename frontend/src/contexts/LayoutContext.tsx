@@ -1,4 +1,5 @@
 import { EnumWebServices } from "constants/webServices";
+import { parseCookies } from "nookies";
 import {
   createContext,
   Dispatch,
@@ -40,6 +41,10 @@ export const LayoutProvider = ({ children }: LayoutProviderProps) => {
   const [menuIsOpen, setMenuIsOpen] = useState(true);
   const [itemsPay, setItemsPay] = useState<ListItemsPay[]>([]);
 
+  const cookies = parseCookies(undefined);
+
+  const valueCookies = cookies["@auth.token"];
+
   const getDataBuy = useCallback(async () => {
     const response = await api.get<ListItemsPay[]>(EnumWebServices.BUY);
 
@@ -52,8 +57,10 @@ export const LayoutProvider = ({ children }: LayoutProviderProps) => {
   }, []);
 
   useEffect(() => {
-    getDataBuy();
-  }, [getDataBuy]);
+    if (valueCookies) {
+      getDataBuy();
+    }
+  }, [getDataBuy, valueCookies]);
 
   return (
     <LayoutContext.Provider
