@@ -4,24 +4,20 @@ import { FiEdit } from "react-icons/fi";
 import { HiMiniCheckCircle, HiMiniXCircle } from "react-icons/hi2";
 import { toast } from "react-toastify";
 import * as Dialog from "@radix-ui/react-dialog";
+import { useNavigate } from "react-router-dom";
 
 import { ResponseApi, api } from "service/api";
 import { EnumWebServices } from "constants/webServices";
-import {
-  DecimalMask,
-  MoneyMask,
-  validateNumberMask,
-} from "helpers/decimalMask";
+import { DecimalMask, validateNumberMask } from "helpers/decimalMask";
 import {
   ConstantRoutes,
   SubstituteRouteParameter,
 } from "constants/constantsRoutes";
+import { useLayoutContext } from "contexts/LayoutContext";
 
 import { ProductsProps } from "pages/Products";
 import { Input } from "components/Input";
 import { Button } from "components/Button";
-import { useNavigate } from "react-router-dom";
-import { useLayoutContext } from "contexts/LayoutContext";
 import { Loading } from "components/Loading";
 
 type ModalDetailProductsProps = {
