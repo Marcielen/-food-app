@@ -96,10 +96,14 @@ export const Pagination = forwardRef<RefPaginationProps, PaginationProps>(
     return (
       <div>
         {/*  {(isLoading || loadingPagination) && <LoadingDefault />} */}
-        <div className="mb-2 h-[400px] md:h-[400px] pl-1 pr-1 overflow-y-auto">
+        <div
+          className={`mb-2 h-[400px] md:h-[400px] ${
+            nPages === 0 ? "pl-0" : "pl-1"
+          } pr-1 overflow-y-auto`}
+        >
           {nPages === 0 ? (
-            <div className="mt-5 underline text-lg text-gray-500">
-              No data found
+            <div className="mt-5 bg-gray-100 p-2  rounded-lg text-lg text-gray-500">
+              You don't have any records to display yet 🥺
             </div>
           ) : (
             renderTableRows

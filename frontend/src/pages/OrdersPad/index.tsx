@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { FieldName, FormProvider, useForm } from "react-hook-form";
+import { FormProvider, useForm } from "react-hook-form";
 import { FiTrash2 } from "react-icons/fi";
 
 import { EnumWebServices } from "constants/webServices";
@@ -15,6 +15,8 @@ import {
   PaginationData,
   RefPaginationProps,
 } from "components/Pagination";
+import { Loading } from "components/Loading";
+import { ModalWarning } from "components/Modal/ModalWarning";
 
 import {
   formDefaultValues,
@@ -26,8 +28,6 @@ import {
   UpdateDataProps,
 } from "./validationForms";
 import { OrdersPadItem } from "./OrdersPadItem";
-import { Loading } from "components/Loading";
-import { ModalWarning } from "components/Modal/ModalWarning";
 
 interface OrdersPadResponse extends PaginationData {
   search?: string;
@@ -258,6 +258,7 @@ export const OrdersPad = () => {
           <Input
             name="search"
             leftElement
+            placeholder="Press enter to search"
             className="w-full mb-2 lg:mb-0 lg:w-[300px]"
           />
         </div>
@@ -321,7 +322,9 @@ export const OrdersPad = () => {
                       name={`amount-${productItem.product_id}`}
                       label="Amount"
                       type="number"
-                      defaultValue={productItem.amount}
+                      defaultValue={
+                        productItem.amount === 0 ? 1 : productItem.amount
+                      }
                     />
                   </div>
                   <div className="h-[40px] flex items-center ml-2 mt-5 justify-center">

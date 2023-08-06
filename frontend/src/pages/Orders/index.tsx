@@ -141,7 +141,7 @@ export const Orders = () => {
             name="search"
             leftElement
             onEnterKeyPress={() => searchOrders()}
-            placeholder="Press enter to perform the search"
+            placeholder="Press enter to search"
             className="w-full mb-2 lg:mb-0 lg:w-[300px]"
           />
         </div>
