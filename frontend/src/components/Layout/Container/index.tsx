@@ -9,7 +9,7 @@ export const Container = ({ children }: ContainerProps) => {
     <div className="inset-0 h-screen w-auto bg-primary flex">
       <div className="flex  justify-center items-center w-full h-full">
         <div
-          className="rounded-lg px-5 relative text-white w-[370px] h-[450px]"
+          className="rounded-lg px-5 relative text-white sm:w-[350px] w-[85%] h-[450px]"
           style={{
             boxShadow: "0px 0px 10px 0px rgb(116, 119, 114)",
           }}
