@@ -59,7 +59,7 @@ export const Products = () => {
     resolver: yupResolver,
   });
 
-  const { handleSubmit: onSubmit, reset, getValues } = formMethods;
+  const { handleSubmit: onSubmit, reset, getValues, setValue } = formMethods;
 
   const getDataProducts = useCallback(async (data?: ProductsResponse) => {
     const response = await api.get<{
@@ -105,6 +105,8 @@ export const Products = () => {
         value: itemCategory.id,
       }))
     );
+
+    return response.data;
   }, []);
 
   const createCategory = useCallback(
@@ -113,10 +115,17 @@ export const Products = () => {
       await api.post(EnumWebServices.CATEGORY_CREATE, {
         name,
       });
-      getCategory();
+      const newCategory = await getCategory();
+      if (newCategory) {
+        setValue(
+          "category_id",
+          newCategory?.find((itemCategory) => itemCategory.name === name)?.id ||
+            ""
+        );
+      }
       setIsLoading(false);
     },
-    [getCategory]
+    [getCategory, setValue]
   );
 
   const handleUpdateProduct = useCallback(
@@ -136,13 +145,16 @@ export const Products = () => {
   );
 
   const loadColumnsData = useCallback(
-    (itensPaginate: PaginationData) => {
-      getDataProducts({ ...itensPaginate, search: getValues().search });
+    async (itensPaginate: PaginationData) => {
+      setIsLoading(true);
+      await getDataProducts({ ...itensPaginate, search: getValues().search });
+      setIsLoading(false);
     },
     [getDataProducts, getValues]
   );
 
   const createProduct = onSubmit(async (data) => {
+    setIsLoading(true);
     const valueData = new FormData();
 
     valueData.append("name", data.name);
@@ -176,6 +188,7 @@ export const Products = () => {
       reset(FormDefaultValues);
       setIsLoading(false);
     }
+    setIsLoading(false);
   });
 
   const handleOpenDrawer = () => {
@@ -222,11 +235,13 @@ export const Products = () => {
             <div className="mt-5">
               <Creatable
                 name="category_id"
+                helperText="Here you can create your product categories, just enter the name of the category and click on the option 😊"
                 options={listCategory}
                 onCreateOption={(value) => {
                   createCategory(value);
                 }}
                 label="Category"
+                placeholder="Create or select category"
               />
             </div>
           </Drawer>

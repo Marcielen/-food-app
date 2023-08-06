@@ -106,7 +106,7 @@ export const OrdersPad = () => {
       EnumWebServices.ORDERS_REGISTER
     );
 
-    setListOrders(response.data);
+    setListOrders(response.data.filter((item) => item.active));
   }, []);
 
   const getDataProducts = useCallback(async () => {
@@ -209,8 +209,13 @@ export const OrdersPad = () => {
   );
 
   const loadColumnsData = useCallback(
-    (itensPaginate: PaginationData) => {
-      getDataOrdersPad({ ...itensPaginate, search: getValues()?.search || "" });
+    async (itensPaginate: PaginationData) => {
+      setIsLoading(true);
+      await getDataOrdersPad({
+        ...itensPaginate,
+        search: getValues()?.search || "",
+      });
+      setIsLoading(false);
     },
     [getDataOrdersPad, getValues]
   );

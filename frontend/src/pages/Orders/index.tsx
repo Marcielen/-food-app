@@ -1,4 +1,4 @@
-import { ForwardedRef, useCallback, useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { FiEdit, FiTrash2 } from "react-icons/fi";
 import { toast } from "react-toastify";
@@ -18,6 +18,7 @@ import {
   RefPaginationProps,
 } from "components/Pagination";
 import { Loading } from "components/Loading";
+import { ModalWarning } from "components/Modal/ModalWarning";
 
 export interface OrdersResponse extends PaginationData {
   search?: string;
@@ -62,14 +63,22 @@ export const Orders = () => {
   };
 
   const handleRemoveOrder = useCallback(async (id: string) => {
-    const response = await api.delete<void, ResponseApi>(
-      `${EnumWebServices.ORDERS_REGISTER_REMOVE}?item_id=${id}`
-    );
+    const modalEvent = new CustomEvent("openModal", {
+      detail: {
+        onConfirm: async () => {
+          const response = await api.delete<void, ResponseApi>(
+            `${EnumWebServices.ORDERS_REGISTER_REMOVE}?item_id=${id}`
+          );
 
-    if (response.sucess) {
-      refPagination.current?.reload();
-      toast.success("Product deleted successfully");
-    }
+          if (response.sucess) {
+            refPagination.current?.reload();
+            toast.success("Product deleted successfully");
+          }
+        },
+      },
+    });
+
+    document.dispatchEvent(modalEvent);
   }, []);
 
   const handleUpdateOrder = useCallback(
@@ -112,8 +121,10 @@ export const Orders = () => {
   };
 
   const loadColumnsData = useCallback(
-    (itensPaginate: PaginationData) => {
-      getDataOrder({ ...itensPaginate, search: getValues().search });
+    async (itensPaginate: PaginationData) => {
+      setIsLoading(true);
+      await getDataOrder({ ...itensPaginate, search: getValues().search });
+      setIsLoading(false);
     },
     [getDataOrder, getValues]
   );
@@ -197,6 +208,7 @@ export const Orders = () => {
           </div>
         }
       />
+      <ModalWarning />
     </FormProvider>
   );
 };

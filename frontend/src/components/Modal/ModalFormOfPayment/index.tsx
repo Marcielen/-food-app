@@ -1,29 +1,15 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { useFormContext } from "react-hook-form";
-import { FiEdit } from "react-icons/fi";
-import {
-  HiBanknotes,
-  HiMiniCheckCircle,
-  HiMiniXCircle,
-  HiOutlineBanknotes,
-  HiOutlineCreditCard,
-} from "react-icons/hi2";
+import React, { useCallback, useState } from "react";
+import { HiOutlineBanknotes, HiOutlineCreditCard } from "react-icons/hi2";
 import { toast } from "react-toastify";
 import * as Dialog from "@radix-ui/react-dialog";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 import { ResponseApi, api } from "service/api";
 import { EnumWebServices } from "constants/webServices";
-import { DecimalMask } from "helpers/decimalMask";
-import {
-  ConstantRoutes,
-  SubstituteRouteParameter,
-} from "constants/constantsRoutes";
-
-import { ProductsProps } from "pages/Products";
-import { Input } from "components/Input";
-import { Button } from "components/Button";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useLayoutContext } from "contexts/LayoutContext";
+import { ConstantRoutes } from "constants/constantsRoutes";
+
+import { Button } from "components/Button";
 import { Loading } from "components/Loading";
 
 type ModalFormOfPaymentProps = {

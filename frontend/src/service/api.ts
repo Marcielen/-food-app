@@ -27,6 +27,7 @@ export function setupAPIClient(ctx = undefined) {
       if (response?.data) {
         return { data: response.data, sucess };
       }
+
       return { sucess };
     },
     (error: AxiosError) => {

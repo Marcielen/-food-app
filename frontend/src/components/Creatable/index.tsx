@@ -1,4 +1,6 @@
+import { Tooltip } from "components/Tooltip";
 import { Controller, useFormContext } from "react-hook-form";
+import { MdInfoOutline } from "react-icons/md";
 import CreatableSelect from "react-select/creatable";
 
 interface CreatableProps {
@@ -9,6 +11,7 @@ interface CreatableProps {
   placeholder?: string;
   valueIsObject?: boolean;
   isMulti?: boolean;
+  helperText?: string;
   onCreateOption?: (value: string) => void;
   options: {
     label: string;
@@ -25,6 +28,7 @@ export const Creatable = ({
   placeholder,
   onCreateOption,
   valueIsObject = false,
+  helperText,
 }: CreatableProps) => {
   const {
     formState: { errors },
@@ -48,11 +52,28 @@ export const Creatable = ({
       render={({ field: { onBlur, value, ref } }) => {
         return (
           <div className={`${className} relative`}>
-            {label && (
-              <label className="text-[14px] font-bold text-gray-500 ">
-                {label}
-              </label>
-            )}
+            <div
+              className={`flex ${
+                helperText ? "justify-between" : "justify-start"
+              }`}
+            >
+              {label && (
+                <label className="text-[14px] font-bold text-gray-500 ">
+                  {label}
+                </label>
+              )}
+              {helperText && (
+                <div>
+                  <MdInfoOutline data-tooltip-id="helper-Text" />
+                  <Tooltip
+                    width="300px"
+                    height="100px"
+                    id="helper-Text"
+                    description={helperText}
+                  />
+                </div>
+              )}
+            </div>
 
             <CreatableSelect
               ref={ref}
@@ -90,6 +111,9 @@ export const Creatable = ({
               onBlur={onBlur}
               options={options as any}
               value={options.find((item) => item.value === value)}
+              formatCreateLabel={(inputText) =>
+                `Create category: "${inputText}"`
+              }
               placeholder={placeholder}
               onChange={(e) => {
                 if (!valueIsObject) {

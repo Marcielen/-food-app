@@ -8,7 +8,7 @@ export interface LoadingProps extends HTMLAttributes<HTMLDivElement> {
 export const Loading = ({ size = 20, ...rest }: LoadingProps) => {
   return (
     <div
-      className="absolute z-[998] bg-[rgba(255_255_255_0.7)] top-[50%] left-[50%] mr-[-50%] min-w-[100%] min-h-[100%]"
+      className="absolute z-[998] bg-[rgba(0,_0,_0,_0.2)] top-[50%] left-[50%] mr-[-50%] min-w-[100%] min-h-[100%]"
       style={{
         transform: "translate(-50%, -50%)",
         transition: "all ease 4s",
