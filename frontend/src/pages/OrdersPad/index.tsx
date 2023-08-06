@@ -27,6 +27,7 @@ import {
 } from "./validationForms";
 import { OrdersPadItem } from "./OrdersPadItem";
 import { Loading } from "components/Loading";
+import { ModalWarning } from "components/Modal/ModalWarning";
 
 interface OrdersPadResponse extends PaginationData {
   search?: string;
@@ -375,6 +376,7 @@ export const OrdersPad = () => {
           </div>
         }
       />
+      <ModalWarning />
     </FormProvider>
   );
 };

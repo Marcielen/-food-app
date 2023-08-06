@@ -39,14 +39,22 @@ export const OrdersPadItem = ({
 
   const handleRemoveOrder = useCallback(
     async (id: string) => {
-      const response = await api.delete<void, ResponseApi>(
-        `${EnumWebServices.ORDERS_PAD_REMOVE}?order_id=${id}`
-      );
+      const modalEvent = new CustomEvent("openModal", {
+        detail: {
+          onConfirm: async () => {
+            const response = await api.delete<void, ResponseApi>(
+              `${EnumWebServices.ORDERS_PAD_REMOVE}?order_id=${id}`
+            );
 
-      if (response.sucess) {
-        getDataOrdersPad();
-        toast.success("Product deleted successfully");
-      }
+            if (response.sucess) {
+              getDataOrdersPad();
+              toast.success("Product deleted successfully");
+            }
+          },
+        },
+      });
+
+      document.dispatchEvent(modalEvent);
     },
     [getDataOrdersPad]
   );

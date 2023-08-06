@@ -10,8 +10,6 @@ import { Button } from "components/Button";
 import { Drawer } from "components/Drawer";
 import { Input } from "components/Input";
 import { Switch } from "components/Swiper";
-
-import { formDefaultValues, FormData, yupResolver } from "./validationForms";
 import {
   Pagination,
   PaginationData,
@@ -19,6 +17,8 @@ import {
 } from "components/Pagination";
 import { Loading } from "components/Loading";
 import { ModalWarning } from "components/Modal/ModalWarning";
+
+import { formDefaultValues, FormData, yupResolver } from "./validationForms";
 
 export interface OrdersResponse extends PaginationData {
   search?: string;
@@ -66,6 +66,7 @@ export const Orders = () => {
     const modalEvent = new CustomEvent("openModal", {
       detail: {
         onConfirm: async () => {
+          setIsLoading(true);
           const response = await api.delete<void, ResponseApi>(
             `${EnumWebServices.ORDERS_REGISTER_REMOVE}?item_id=${id}`
           );
@@ -73,7 +74,9 @@ export const Orders = () => {
           if (response.sucess) {
             refPagination.current?.reload();
             toast.success("Product deleted successfully");
+            setIsLoading(false);
           }
+          setIsLoading(false);
         },
       },
     });

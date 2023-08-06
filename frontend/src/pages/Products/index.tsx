@@ -21,6 +21,7 @@ import { InputNumber } from "components/Input/InputNumber";
 import { Loading } from "components/Loading";
 
 import { FormDefaultValues, yupResolver, FormDataProps } from "./validateForms";
+import { ModalWarning } from "components/Modal/ModalWarning";
 
 export type ProductsProps = {
   banner?: string;
@@ -84,14 +85,25 @@ export const Products = () => {
   }, []);
 
   const handleRemoveProduct = useCallback(async (id: string) => {
-    const response = await api.delete<void, ResponseApi>(
-      `${EnumWebServices.PRODUCT_REMOVE}?product_id=${id}`
-    );
+    const modalEvent = new CustomEvent("openModal", {
+      detail: {
+        onConfirm: async () => {
+          setIsLoading(true);
+          const response = await api.delete<void, ResponseApi>(
+            `${EnumWebServices.PRODUCT_REMOVE}?product_id=${id}`
+          );
 
-    if (response.sucess) {
-      refPagination.current.reload();
-      toast.success("Product deleted successfully");
-    }
+          if (response.sucess) {
+            refPagination.current.reload();
+            toast.success("Product deleted successfully");
+            setIsLoading(false);
+          }
+          setIsLoading(false);
+        },
+      },
+    });
+
+    document.dispatchEvent(modalEvent);
   }, []);
 
   const getCategory = useCallback(async () => {
@@ -307,6 +319,7 @@ export const Products = () => {
           </div>
         }
       />
+      <ModalWarning />
     </FormProvider>
   );
 };
