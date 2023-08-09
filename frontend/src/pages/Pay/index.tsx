@@ -24,6 +24,8 @@ export const Pay = () => {
 
   const params = useParams<{ id: string }>();
 
+  const listProductId = listProducts.map((itemProduct) => itemProduct.id);
+
   const getDataProducts = useCallback(async () => {
     const response = await api.get<void, ResponseApi<ProductProps[]>>(
       EnumWebServices.ORDERS_PAD_PRODUCT,
@@ -93,6 +95,7 @@ export const Pay = () => {
           </div>
           <ModalFormOfPayment
             open={openModal}
+            listProductId={listProductId}
             price={String(price)}
             onClose={() => {
               setOpenModal(false);

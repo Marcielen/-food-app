@@ -43,7 +43,7 @@ export const OrdersPadItem = ({
         detail: {
           onConfirm: async () => {
             const response = await api.delete<void, ResponseApi>(
-              `${EnumWebServices.ORDERS_PAD_REMOVE}?order_id=${id}`
+              `${EnumWebServices.ORDERS_PAD_REMOVE}?order_id=${id}&wasSold=false`
             );
 
             if (response.sucess) {

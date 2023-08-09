@@ -42,7 +42,7 @@ export const Header = ({
   };
 
   const isPayChecked = itemsPay.some((item) => item.isChecked);
-  console.log(itemsPay);
+
   const handleOrderIsChecked = (index: number) => {
     setItemsPay((prev) =>
       prev.map((item, indexItem) => {

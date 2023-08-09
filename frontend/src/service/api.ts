@@ -43,7 +43,7 @@ export function setupAPIClient(ctx = undefined) {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       toast.error(error?.response?.data?.error || "");
-      return Promise.reject(error);
+      return { sucess: false };
     }
   );
 

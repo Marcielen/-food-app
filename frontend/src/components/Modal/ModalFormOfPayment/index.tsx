@@ -16,6 +16,7 @@ type ModalFormOfPaymentProps = {
   open: boolean;
   onClose: () => void;
   price: string;
+  listProductId: string[];
 };
 
 export type DetailProductProps = {
@@ -52,6 +53,7 @@ export const ModalFormOfPayment = ({
   open,
   onClose,
   price,
+  listProductId,
 }: ModalFormOfPaymentProps) => {
   const [listPayment, setListPayment] = useState(formOfPayment);
   const [isLoading, setIsLoading] = useState(false);
@@ -87,6 +89,12 @@ export const ModalFormOfPayment = ({
       await api.delete<void, ResponseApi>(
         `${EnumWebServices.ORDERS_PAD_REMOVE}?order_id=${id}`
       );
+      await api.put<void, ResponseApi>(
+        EnumWebServices.ORDERS_PAD_UPDATE_PRODUCT,
+        {
+          listProductId,
+        }
+      );
 
       toast.success("Payment made successfully");
       getDataBuy();
@@ -94,7 +102,7 @@ export const ModalFormOfPayment = ({
       navidate(ConstantRoutes.DASHBOARD);
     }
     setIsLoading(false);
-  }, [navidate, id, price, getDataBuy, state]);
+  }, [navidate, id, price, getDataBuy, listProductId, state]);
 
   return (
     <Dialog.Root open={open} onOpenChange={onClose}>

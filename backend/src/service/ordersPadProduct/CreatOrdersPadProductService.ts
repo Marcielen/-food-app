@@ -29,6 +29,7 @@ class CreateOrdersPadProductService {
         totalPrice: price,
         banner,
         name,
+        wasSold: false,
       },
     });
 

@@ -97,6 +97,8 @@ model orderPadProduct {
   banner String?
   name String?
 
+  wasSold Boolean?
+
   created_at  DateTime? @default(now())
   updated_at  DateTime? @default(now())
 
