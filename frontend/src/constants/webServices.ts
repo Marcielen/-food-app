@@ -33,4 +33,7 @@ export const EnumWebServices = {
 
   PAY: "/pay",
   PAY_CREATE: "/pay-create",
+
+  PRODUCT_SOLD: "/product-sold",
+  PRODUCT_SOLD_CREATE: "/product-sold-create",
 };

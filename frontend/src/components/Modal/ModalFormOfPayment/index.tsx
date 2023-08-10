@@ -16,7 +16,11 @@ type ModalFormOfPaymentProps = {
   open: boolean;
   onClose: () => void;
   price: string;
-  listProductId: string[];
+  listProductId: {
+    product_id: string;
+    product_name: string;
+    amount: number;
+  }[];
 };
 
 export type DetailProductProps = {
@@ -89,12 +93,10 @@ export const ModalFormOfPayment = ({
       await api.delete<void, ResponseApi>(
         `${EnumWebServices.ORDERS_PAD_REMOVE}?order_id=${id}`
       );
-      await api.put<void, ResponseApi>(
-        EnumWebServices.ORDERS_PAD_UPDATE_PRODUCT,
-        {
-          listProductId,
-        }
-      );
+      console.log("oi", listProductId);
+      await api.post<void, ResponseApi>(EnumWebServices.PRODUCT_SOLD_CREATE, {
+        listProductId,
+      });
 
       toast.success("Payment made successfully");
       getDataBuy();

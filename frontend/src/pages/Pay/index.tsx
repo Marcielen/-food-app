@@ -24,8 +24,12 @@ export const Pay = () => {
 
   const params = useParams<{ id: string }>();
 
-  const listProductId = listProducts.map((itemProduct) => itemProduct.id);
-
+  const listProductId = listProducts.map(({ name, product_id, amount }) => ({
+    product_id,
+    product_name: name,
+    amount,
+  }));
+  console.log(listProductId);
   const getDataProducts = useCallback(async () => {
     const response = await api.get<void, ResponseApi<ProductProps[]>>(
       EnumWebServices.ORDERS_PAD_PRODUCT,
