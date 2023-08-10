@@ -15,7 +15,7 @@ class CreateItemsService {
     });
 
     if (orderExist) {
-      throw new Error("Order already exist");
+      throw new Error("Order exist");
     }
 
     const orderRegistration = await prismaClient.orderRegistration.create({

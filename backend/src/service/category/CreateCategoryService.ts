@@ -8,7 +8,7 @@ type CreateCategoryProps = {
 class CreateCategoryService {
   async execute({ name, idUser }: CreateCategoryProps) {
     if (name === "") {
-      throw new Error("Category invalid");
+      throw new Error("Name invalid");
     }
 
     const category = await prismaClient.category.create({

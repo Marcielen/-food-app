@@ -30,6 +30,8 @@ import { UpdateOrdersPadProductController } from "./controller/ordersPadProduct/
 import { UpdateOrdersPadController } from "./controller/ordersPad/UpdateOrdersPadController";
 import { CreatePayController } from "./controller/pay/CreatePayController";
 import { ListPayController } from "./controller/pay/ListPayController";
+import { ListProductSoldController } from "./controller/ProductSold/ListProductSoldController";
+import { CreateProductSoldController } from "./controller/ProductSold/CreateProductSoldController";
 
 const router = Router();
 
@@ -182,4 +184,17 @@ router.get(
   EnumWebServices.PAY,
   isAuthenticated,
   new ListPayController().handle
+);
+
+// product sold
+
+router.post(
+  EnumWebServices.PRODUCT_SOLD_CREATE,
+  isAuthenticated,
+  new CreateProductSoldController().handle
+);
+router.get(
+  EnumWebServices.PRODUCT_SOLD,
+  isAuthenticated,
+  new ListProductSoldController().handle
 );

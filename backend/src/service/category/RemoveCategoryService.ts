@@ -3,7 +3,7 @@ import prismaClient from "../../prisma";
 class RemoveCategoryService {
   async execute(id: string) {
     if (id === "") {
-      throw new Error("Category invalid");
+      throw new Error("category invalid");
     }
 
     const category = await prismaClient.category.delete({

@@ -15,7 +15,7 @@ class CreatePayService {
     });
 
     if (orderPadIsExist.length > 0) {
-      throw new Error("Order pad already exist");
+      throw new Error("Order pad exist");
     }
 
     const payService = await prismaClient.pay.create({

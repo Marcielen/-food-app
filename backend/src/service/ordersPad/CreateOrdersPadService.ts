@@ -19,7 +19,7 @@ class CreateOrderPadService {
     });
 
     if (orderExist) {
-      throw new Error("Order already exist");
+      throw new Error("Order exist");
     }
 
     const orderPad = await prismaClient.orderPad.create({

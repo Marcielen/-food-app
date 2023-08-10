@@ -3,15 +3,14 @@ import prismaClient from "../../prisma";
 type OrdersPadProductServiceProps = {
   idUser: string;
   product_id: string;
-  amount?: number;
-  wasSold?: boolean;
+  amount: number;
 };
 
 class UpdateOrdersPadProductService {
-  async execute({ product_id, amount, wasSold }: OrdersPadProductServiceProps) {
+  async execute({ product_id, amount }: OrdersPadProductServiceProps) {
     const orderPadProduct = await prismaClient.orderPadProduct.update({
       where: { id: product_id },
-      data: { amount, wasSold },
+      data: { amount },
     });
 
     return orderPadProduct;

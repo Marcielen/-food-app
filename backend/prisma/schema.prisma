@@ -97,8 +97,6 @@ model orderPadProduct {
   banner String?
   name String?
 
-  wasSold Boolean?
-
   created_at  DateTime? @default(now())
   updated_at  DateTime? @default(now())
 
@@ -111,6 +109,18 @@ model pay {
   price String
 
   idUser  String
+  created_at  DateTime? @default(now())
+  updated_at  DateTime? @default(now())
+}
+
+model productSold {
+  id String @id @default(uuid())
+  product_id String
+  product_name String
+  idUser  String
+
+  amount Int?
+
   created_at  DateTime? @default(now())
   updated_at  DateTime? @default(now())
 }
