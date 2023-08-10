@@ -13,12 +13,7 @@ Análise de Consumo: Descubra quais são os produtos mais populares entre os cli
 
 Faturamento Geral: É possível você saber quanto foi o seu faturamento total durante o mês.
 
-![WhatsApp Image 2023-08-10 at 19 39 21](https://github.com/Marcielen/-food-app/assets/80776887/fa6702fe-4208-49c8-8b48-afd041e33074)
-![WhatsApp Image 2023-08-10 at 19 39 21 (1)](https://github.com/Marcielen/-food-app/assets/80776887/0aa6a731-f1c8-428d-ba33-8558cb8f211b)
-<div align="left">
-<img src="https://github.com/Marcielen/-food-app/assets/80776887/fa6702fe-4208-49c8-8b48-afd041e33074" width="200px" />
-</div>
-<div align="left">
-<img src="https://github.com/Marcielen/-food-app/assets/80776887/0aa6a731-f1c8-428d-ba33-8558cb8f211b" width="200px" />
-</div>
+![image](https://github.com/Marcielen/-food-app/assets/80776887/95efb4ea-a6e6-4876-b2f4-f59aeb7881da)
+![image](https://github.com/Marcielen/-food-app/assets/80776887/028dbbe3-fcad-448f-9208-b5bed12d630b)
+
 
