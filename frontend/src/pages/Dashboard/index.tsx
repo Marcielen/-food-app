@@ -87,27 +87,29 @@ export const Dashboard = () => {
         <p className="text-lg font-bold">Total sales in the month:</p>
         <p className="text-6xl pt-3 font-bold">{DecimalMask(price)}</p>
       </div>
-      <div className="border-2 border-gray-300 w-[500px] mt-10 rounded-lg">
-        <p className="pl-4 pt-4 text-lg font-bold">Top selling products</p>
+      {productSold.length > 0 && (
+        <div className="border-2 border-gray-300 w-[500px] mt-10 rounded-lg">
+          <p className="pl-4 pt-4 text-lg font-bold">Top selling products</p>
 
-        <BarChart
-          width={500}
-          height={300}
-          data={data}
-          margin={{
-            top: 20,
-            right: 30,
-            left: 20,
-            bottom: 5,
-          }}
-        >
-          <XAxis dataKey="name" />
-          <Tooltip content={<CustomTooltip />} />
-          {data.map((entry, index) => (
-            <Bar key={index} dataKey="uv" stackId="a" fill={entry.fill} />
-          ))}
-        </BarChart>
-      </div>
+          <BarChart
+            width={500}
+            height={300}
+            data={data}
+            margin={{
+              top: 20,
+              right: 30,
+              left: 20,
+              bottom: 5,
+            }}
+          >
+            <XAxis dataKey="name" />
+            <Tooltip content={<CustomTooltip />} />
+            {data.map((entry, index) => (
+              <Bar key={index} dataKey="uv" stackId="a" fill={entry.fill} />
+            ))}
+          </BarChart>
+        </div>
+      )}
     </div>
   );
 };

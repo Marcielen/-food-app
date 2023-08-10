@@ -93,7 +93,7 @@ export const ModalFormOfPayment = ({
       await api.delete<void, ResponseApi>(
         `${EnumWebServices.ORDERS_PAD_REMOVE}?order_id=${id}`
       );
-      console.log("oi", listProductId);
+
       await api.post<void, ResponseApi>(EnumWebServices.PRODUCT_SOLD_CREATE, {
         listProductId,
       });
