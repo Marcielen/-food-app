@@ -11,3 +11,7 @@ Geração de Vendas: Registre as vendas de forma rápida e precisa. Crie comanda
 Análise de Consumo: Descubra quais são os produtos mais populares entre os clientes com um gráfico intuitivo. Sendo possível criar padrões de consumo e ajustar seu cardápio para atender às preferências dos clientes.
 
 Faturamento Geral: É possível você saber quanto foi o seu faturamento total durante o mês.
+
+
+![WhatsApp Image 2023-08-10 at 19 37 30](https://github.com/Marcielen/-food-app/assets/80776887/776dcc02-59ce-41fe-ac41-8ca3168f172b)
+![WhatsApp Image 2023-08-10 at 19 37 29](https://github.com/Marcielen/-food-app/assets/80776887/ea97697b-d68d-4014-954c-8f649b261b2f)
