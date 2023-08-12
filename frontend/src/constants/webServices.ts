@@ -36,4 +36,6 @@ export const EnumWebServices = {
 
   PRODUCT_SOLD: "/product-sold",
   PRODUCT_SOLD_CREATE: "/product-sold-create",
+
+  HEALTH: "/health",
 };

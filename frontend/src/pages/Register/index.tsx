@@ -2,7 +2,7 @@ import { FormProvider, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
-import { api } from "service/api";
+import { ResponseApi, api } from "service/api";
 import { EnumWebServices } from "constants/webServices";
 
 import { Button } from "components/Button";
@@ -33,10 +33,15 @@ export const Register = () => {
   };
 
   const handleCreateUser = handleSubmit(async (data) => {
-    await api.post(EnumWebServices.USERS, data);
+    const response = await api.post<void, ResponseApi>(
+      EnumWebServices.USERS,
+      data
+    );
 
-    toast.success("Successfully registered user");
-    navigation(ConstantRoutes.LOGIN);
+    if (response.sucess) {
+      toast.success("Successfully registered user");
+      navigation(ConstantRoutes.LOGIN);
+    }
   });
 
   return (

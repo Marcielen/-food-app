@@ -8,14 +8,14 @@ import {
 import jwt_decode from "jwt-decode";
 import { destroyCookie, parseCookies, setCookie } from "nookies";
 
-import { api } from "service/api";
+import { api, ResponseApi } from "service/api";
 import { EnumWebServices } from "constants/webServices";
 
 type AuthContextData = {
   user: UserProps | undefined;
   valueUser: ValueUserProps | undefined;
   isAuthenticated: boolean;
-  signIn: (credentials: SignInProps) => Promise<void>;
+  signIn: (credentials: SignInProps) => Promise<boolean>;
   signOut: () => void;
   userExpiration: boolean;
 };
@@ -63,10 +63,17 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const cookies = parseCookies(undefined);
 
   async function signIn({ email, password }: SignInProps) {
-    const response = await api.post<AuthProps>(EnumWebServices.SESSION, {
-      email,
-      password,
-    });
+    const response = await api.post<void, ResponseApi<AuthProps>>(
+      EnumWebServices.SESSION,
+      {
+        email,
+        password,
+      }
+    );
+
+    if (response.sucess === false) {
+      return false;
+    }
 
     const { id, token, name } = response.data;
 
@@ -84,6 +91,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     api.defaults.headers["Authorization"] = `Bearer ${token}`;
 
     window.location.reload();
+    return true;
   }
 
   const valueUser = useCallback(() => {

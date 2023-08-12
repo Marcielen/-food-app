@@ -32,6 +32,7 @@ import { CreatePayController } from "./controller/pay/CreatePayController";
 import { ListPayController } from "./controller/pay/ListPayController";
 import { ListProductSoldController } from "./controller/ProductSold/ListProductSoldController";
 import { CreateProductSoldController } from "./controller/ProductSold/CreateProductSoldController";
+import { HealthController } from "./controller/health/HealthController";
 
 const router = Router();
 
@@ -198,3 +199,6 @@ router.get(
   isAuthenticated,
   new ListProductSoldController().handle
 );
+
+// health
+router.get(EnumWebServices.HEALTH, new HealthController().handle);
