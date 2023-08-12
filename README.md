@@ -1,5 +1,5 @@
 # Foodieland
-"O Foodieland é um sistema de gestão de comandas projetado para atender às necessidades específicas dos restaurantes. Com ele, você pode facilmente administrar todas as operações relacionadas ao seu estabelecimento de forma eficiente e intuitiva.
+O Foodieland é um sistema de gestão de comandas projetado para atender às necessidades específicas dos restaurantes. Com ele, você pode facilmente administrar todas as operações relacionadas ao seu estabelecimento de forma eficiente e intuitiva.
 
 Principais recursos:
 
