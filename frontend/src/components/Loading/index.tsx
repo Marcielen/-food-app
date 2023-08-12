@@ -13,7 +13,7 @@ export const Loading = ({
 }: LoadingProps) => {
   return (
     <>
-      <div className="absolute left-0 top-0 bg-[#413f3f] opacity-[0.7] h-screen w-full" />
+      <div className="absolute left-0 top-0 bg-[#413f3f] opacity-[0.7] h-[100vh] w-[100vw]" />
 
       <div
         className="absolute 
