@@ -13,11 +13,9 @@ export const Loading = ({
 }: LoadingProps) => {
   return (
     <>
-      <div className="absolute left-0 top-0 bg-[#413f3f] opacity-[0.7] h-[100vh] w-[100vw]" />
-
+      <div className="fixed left-0 top-0 z-[998] bg-[#413f3f] opacity-[0.7] h-[100vh] w-[100vw]" />
       <div
-        className="absolute 
-      top-[50%] left-[50%]  mr-[-50%] min-w-[100%] min-h-[100%]"
+        className="fixed z-[998] top-[50%] left-[50%] mr-[-50%] min-w-[100%] min-h-[100%]"
         style={{
           transform: "translate(-50%, -50%)",
           transition: "all ease 4s",
